@@ -1,0 +1,100 @@
+[tool.poetry]
+name = "app"
+version = "0.1.0"
+description = ""
+authors = ["Henrique C. C. de Andrade <henrique.ccda@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.3"
+djangorestframework = "^3.14.0"
+psycopg = "^3.1.18"
+drf-spectacular = "^0.27.1"
+gunicorn = "^21.2.0"
+python-decouple = "^3.8"
+dj-database-url = "^2.1.0"
+django-extensions = "^3.2.3"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest-randomly = "^3.15.0"
+pytest-sugar = "^1.0.0"
+pytest = "^8.1.1"
+pytest-cov = "^4.1.0"
+coverage = "^7.4.3"
+ruff = "^0.3.2"
+black = "^24.2.0"
+taskipy = "^1.12.2"
+ipython = "^8.22.2"
+ipdb = "^0.13.13"
+pre-commit = "^3.6.2"
+faker = "^24.1.0"
+pytest-django = "^4.8.0"
+model-bakery = "^1.17.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "app.settings"
+addopts = "-ra -vv"
+
+markers=[
+    "unity: marks unity tests",
+    "integration: marks integration testes",
+]
+
+[tool.black]
+line-length = 120
+exclude = '''
+/(
+      \.eggs
+    | \.git
+    | \.venv
+)/
+'''
+
+[tool.ruff]
+line-length = 120
+
+exclude = [
+    ".venv"
+]
+
+src = ["app"]
+
+[tool.ruff.lint]
+
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+]
+
+
+[tool.taskipy.variables]
+src = "app"
+
+[tool.taskipy.tasks]
+fmt_black = {cmd="black {src}", help="Chamando do black.", use_vars = true}
+fmt_ruff= {cmd="ruff check {src} --fix", help="Chamando do ruff.", use_vars = true}
+fmt = {cmd="task fmt_ruff && task fmt_black", help="Formatador do código."}
+
+lin_ruff = {cmd="ruff check {src}", help="Linter com o Ruff.", use_vars = true}
+linter = {cmd="task lin_ruff", help="Linter."}
+
+tests = {cmd="pytest", help="Rodando os testes."}
+tests_cov = {cmd="pytest --cov-report html --cov={src}", help="Rodando os testes com cobertura.", use_vars = true}
+
+server_coverage = {cmd="python -m http.server 8001 -d htmlcov", help="Mostrando o relatorio de cobertura de teste."}
+
+clean = {cmd="rm -rvf .ruff_cache && rm -v .coverage && rm -rfv .pytest_cache && rm -rvf htmlcov && find app -name '*.pyc' -exec rm -vf {} \\;", help="Limpa o projeto."}
+
+up_db = {cmd="docker compose -f docker-compose-dev.yml up database -d", help="Subindo o contanier do DB."}
+
+server_prod = {cmd="gunicorn app.wsgi --workers 3 --bind localhost:8000 --log-file=- --access-logfile=-", help="Subindo o servido com gunicorn"}

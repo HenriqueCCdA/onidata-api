@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+
+  proxy:
+    container_name: onidata-api-proxy
+    restart: 'no'
+    build:
+      context: nginx
+    ports:
+      - 80:80
+
+  api:
+    container_name: onidata-api-app
+    build:
+      dockerfile: ./Dockerfile.prod
+    image: app:latest
+    restart: 'no'
+    environment:
+      - SECRET_KEY="Sua chave secreta aqui"
+      - DOC_API=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - DATABASE_URL=postgres://user:123456@database:5432/app_db
+    depends_on:
+      - database
+
+  database:
+    container_name: onidata-api-app-db
+    image: postgres:16.1-alpine
+    restart: 'no'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - LC_ALL=C.UTF-8
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=user
+      - POSTGRES_DB=app_db
+
+volumes:
+  pg_data:

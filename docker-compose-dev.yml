@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+
+  api:
+    container_name: onidata-api-app
+    build:
+      dockerfile: ./Dockerfile.dev
+    image: app:dev
+    volumes:
+      - ./:/home/app/
+    restart: 'no'
+    stdin_open: true   # Add this line into your service
+    tty: true   # Add this line into your service
+    environment:
+      - SECRET_KEY="Sua chave secreta aqui"
+      - DOC_API=True
+      - DEBUG=True
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - PYTHONBREAKPOINT=ipdb.set_trace
+      - DATABASE_URL=postgres://user:123456@database:5432/app_db
+    ports:
+      - 8000:8000
+    depends_on:
+      - database
+
+  database:
+    container_name: onidata-api-app_db
+    image: postgres:16.1-alpine
+    restart: 'no'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - LC_ALL=C.UTF-8
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=user
+      - POSTGRES_DB=app_db
+    ports:
+      - 5432:5432
+
+volumes:
+  pg_data:
