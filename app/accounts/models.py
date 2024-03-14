@@ -20,16 +20,19 @@ class CustomUser(PermissionsMixin, CreationModificationBase, AbstractBaseUser):
     is_staff = models.BooleanField("staff status", default=False)
     is_active = models.BooleanField("Ativo", default=True)
 
+    objects = UserManager()
+
     class Meta:
         verbose_name = "usuário"
         verbose_name_plural = "usuários"
         abstract = False
 
-    objects = UserManager()
-
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return self.get_username()
 
     def clean(self):
         self.email = self.__class__.objects.normalize_email(self.email)

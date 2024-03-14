@@ -7,12 +7,12 @@ User = get_user_model()
 fake = Faker()
 
 
-@pytest.fixture
+@pytest.fixture()
 def superuser(db):
     return User.objects.create_superuser(email=fake.email(), password=fake.password())
 
 
-@pytest.fixture
+@pytest.fixture()
 def payload_get_token(user_with_password):
     return {
         "email": user_with_password.email,

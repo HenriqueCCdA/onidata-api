@@ -9,7 +9,7 @@ fake = Faker()
 User = get_user_model()
 
 
-@pytest.mark.integration
+@pytest.mark.integration()
 def test_positive_valid_user(payload_get_token):
 
     serializer = MyAuthTokenSerializer(data=payload_get_token)
@@ -21,7 +21,7 @@ def test_positive_valid_user(payload_get_token):
     assert serializer.validated_data["user"] == user
 
 
-@pytest.mark.unity
+@pytest.mark.unity()
 @pytest.mark.parametrize("field", ["email", "password"])
 def test_negative_missing_fields(field):
 
@@ -39,7 +39,7 @@ def test_negative_missing_fields(field):
     assert serializer.errors[field] == ["Este campo é obrigatório."]
 
 
-@pytest.mark.integration
+@pytest.mark.integration()
 def test_negative_wrong_credentials(payload_get_token):
 
     payload_get_token["password"] = "wrong_password"

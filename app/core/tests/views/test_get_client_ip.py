@@ -7,7 +7,7 @@ from app.conftest import fake
 URL = resolve_url("get_client_ip")
 
 
-@pytest.mark.integration
+@pytest.mark.integration()
 def test_get_client_ip(client_api):
 
     ip = fake.ipv4()
