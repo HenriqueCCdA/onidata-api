@@ -9,7 +9,7 @@ fake = Faker()
 URL = resolve_url("get_token")
 
 
-@pytest.mark.integration
+@pytest.mark.integration()
 def test_positive_with_email_password(client_api, payload_get_token, user_with_password):
 
     response = client_api.post(URL, data=payload_get_token, format="json")
@@ -22,7 +22,7 @@ def test_positive_with_email_password(client_api, payload_get_token, user_with_p
     assert body == {"token": token.key}
 
 
-@pytest.mark.integration
+@pytest.mark.integration()
 def test_negative_wrong_credentials(client_api, payload_get_token, user_with_password):
 
     payload_get_token["password"] = "wrong_password"
@@ -36,7 +36,7 @@ def test_negative_wrong_credentials(client_api, payload_get_token, user_with_pas
     assert body["non_field_errors"] == ["Não é possível fazer login com as credenciais fornecidas."]
 
 
-@pytest.mark.unity
+@pytest.mark.unity()
 @pytest.mark.parametrize("field", ["email", "password"])
 def test_negative_missing_fields(client_api, payload_get_token, field):
 

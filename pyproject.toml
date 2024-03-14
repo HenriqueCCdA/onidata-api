@@ -74,6 +74,8 @@ select = [
     "I",  # isort
     "C",  # flake8-comprehensions
     "B",  # flake8-bugbear
+    "DJ", # flake8-django
+    "PT", # flake8-pytest-style
 ]
 
 

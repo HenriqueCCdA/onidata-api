@@ -3,7 +3,7 @@ import pytest
 from app.accounts.serializers import WhoamiSerializer
 
 
-@pytest.mark.unity
+@pytest.mark.unity()
 def test_positive(user):
 
     serializer = WhoamiSerializer(instance=user)

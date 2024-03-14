@@ -5,27 +5,29 @@ from model_bakery import baker
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
+from app.core.models import Loan
+
 User = get_user_model()
 
 fake = Faker()
 
 
-@pytest.fixture
+@pytest.fixture()
 def client_api():
     return APIClient()
 
 
-@pytest.fixture
+@pytest.fixture()
 def user(db):
     return baker.make(User)
 
 
-@pytest.fixture
+@pytest.fixture()
 def other_user(user):
     return baker.make(User)
 
 
-@pytest.fixture
+@pytest.fixture()
 def user_with_password(db):
     password = fake.password()
     user = User.objects.create(email=fake.email(), password=password)
@@ -33,7 +35,17 @@ def user_with_password(db):
     return user
 
 
-@pytest.fixture
+@pytest.fixture()
 def user_with_token(user_with_password):
     Token.objects.create(user=user_with_password)
     return user_with_password
+
+
+@pytest.fixture()
+def loan(user):
+    return baker.make(Loan, user=user)
+
+
+@pytest.fixture()
+def two_loans(user):
+    return baker.make(Loan, user=user, _quantity=2)

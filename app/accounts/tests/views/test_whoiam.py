@@ -5,7 +5,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 URL = resolve_url("whoiam")
 
 
-@pytest.mark.integration
+@pytest.mark.integration()
 def test_positive(client_api, user_with_token):
 
     client_api.credentials(HTTP_AUTHORIZATION="Token " + user_with_token.auth_token.key)
@@ -22,7 +22,7 @@ def test_positive(client_api, user_with_token):
     assert body["modified_at"] == user_with_token.modified_at.astimezone().isoformat()
 
 
-@pytest.mark.integration
+@pytest.mark.integration()
 def test_negative_invalid_token(client_api, user_with_token):
 
     client_api.credentials(HTTP_AUTHORIZATION="Token " + user_with_token.auth_token.key + "1")
@@ -36,7 +36,7 @@ def test_negative_invalid_token(client_api, user_with_token):
     assert body == {"detail": "Token inválido."}
 
 
-@pytest.mark.integration
+@pytest.mark.integration()
 def test_negative_without_token(client):
 
     response = client.get(URL)
