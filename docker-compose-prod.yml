@@ -3,12 +3,20 @@ version: "3.8"
 services:
 
   proxy:
-    container_name: onidata-api-proxy
+    container_name: onidata-api-proxy1
     restart: 'no'
     build:
       context: nginx
+      dockerfile: ./Dockerfile.proxy1
     ports:
       - 80:80
+
+  proxy2:
+    container_name: onidata-api-proxy2
+    restart: 'no'
+    build:
+      context: nginx
+      dockerfile: ./Dockerfile.proxy2
 
   api:
     container_name: onidata-api-app
@@ -19,7 +27,7 @@ services:
     environment:
       - SECRET_KEY="Sua chave secreta aqui"
       - DOC_API=True
-      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - ALLOWED_HOSTS=localhost,127.0.0.1,10.0.0.101
       - DATABASE_URL=postgres://user:123456@database:5432/app_db
     depends_on:
       - database

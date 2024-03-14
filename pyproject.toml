@@ -89,9 +89,9 @@ lin_ruff = {cmd="ruff check {src}", help="Linter com o Ruff.", use_vars = true}
 linter = {cmd="task lin_ruff", help="Linter."}
 
 tests = {cmd="pytest", help="Rodando os testes."}
-tests_cov = {cmd="pytest --cov-report html --cov={src}", help="Rodando os testes com cobertura.", use_vars = true}
+tests_report = {cmd="pytest --cov-report html --cov={src}", help="Rodando os testes com cobertura.", use_vars = true}
 
-server_coverage = {cmd="python -m http.server 8001 -d htmlcov", help="Mostrando o relatorio de cobertura de teste."}
+report_server = {cmd="python -m http.server 8001 -d htmlcov", help="Mostrando o relatorio de cobertura de teste."}
 
 clean = {cmd="rm -rvf .ruff_cache && rm -v .coverage && rm -rfv .pytest_cache && rm -rvf htmlcov && find app -name '*.pyc' -exec rm -vf {} \\;", help="Limpa o projeto."}
 
