@@ -1,0 +1,50 @@
+FROM python:3.12-alpine as requirements-stage
+
+# set work directory
+WORKDIR /tmp
+
+# copy project
+RUN pip install --upgrade pip && pip install poetry poetry-plugin-export
+
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry export --without dev --format=requirements.txt > requirements.txt
+
+#
+FROM python:3.12-alpine
+
+ARG USER_DIR=/home/app
+
+# set work directory
+WORKDIR $USER_DIR
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV POETRY_VIRTUALENVS_CREATE=false
+
+# Create the app user
+RUN addgroup -S appgroup && adduser -S app -G appgroup && mkdir -p $USER_DIR
+
+# install depedencies for postgres
+RUN set -eux; \
+    apk update && apk add\
+    linux-headers\
+    libpq-dev\
+    gcc\
+    libc-dev\
+    && rm -rf /var/cache/apk/*
+
+COPY --from=requirements-stage /tmp/requirements.txt .
+
+# copy project
+RUN pip install --no-cache-dir --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
+COPY app app
+
+RUN chown -R app:appgroup $USER_DIR
+USER app
+
+EXPOSE 8000
+
+CMD ["gunicorn", "app.wsgi", "--workers", "3", "--bind", "0.0.0.0:8000", "--log-file=-", "--access-logfile=-"]
