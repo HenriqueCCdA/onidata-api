@@ -6,6 +6,9 @@ from django.db import models
 
 from app.accounts.models import CreationModificationBase
 
+# TODO: Estou usando o created_at com data de solicitaçao e pagammento,
+# não tenho certeza se isso é bom. Pensar mellhor nisso depois
+
 
 class Loan(CreationModificationBase, models.Model):
 
@@ -19,3 +22,12 @@ class Loan(CreationModificationBase, models.Model):
 
     def __str__(self):
         return f"loan(uuid={self.uuid},value={self.nominal_value})"
+
+
+class Payment(CreationModificationBase, models.Model):
+
+    loan = models.ForeignKey(Loan, on_delete=models.DO_NOTHING, related_name="payments")
+    value = models.DecimalField(max_digits=14, decimal_places=2, validators=[MinValueValidator(0.00)])
+
+    def __str__(self):
+        return f"payment(id={self.id},loan_uuid={self.loan.uuid},value={self.value})"
