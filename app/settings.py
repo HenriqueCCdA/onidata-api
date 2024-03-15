@@ -151,4 +151,6 @@ SPECTACULAR_SETTINGS = {
     "COMPONENT_SPLIT_REQUEST": False,
 }
 
-SHELL_PLUS_IMPORTS = []
+SHELL_PLUS_IMPORTS = [
+    "from app.core.serializers import LoanSerializer, PaymentSerializer",
+]

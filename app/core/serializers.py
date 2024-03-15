@@ -1,7 +1,7 @@
 from django.forms import ValidationError
 from rest_framework import serializers
 
-from app.core.models import Loan
+from app.core.models import Loan, Payment
 from app.core.services import extract_client_id
 
 
@@ -49,3 +49,37 @@ class LoanSerializer(serializers.ModelSerializer):
             raise ValidationError("O user precisa estar no contexto.", code="invalid") from e
 
         return super().validate(attrs)
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+
+    loan = serializers.UUIDField(source="loan.uuid")
+
+    class Meta:
+        model = Payment
+        fields = (
+            "value",
+            "loan",
+            "created_at",
+            "modified_at",
+        )
+
+        extra_kwargs = {
+            "created_at": {"read_only": True},
+            "modified_at": {"read_only": True},
+        }
+
+    def validate(self, attrs):
+
+        loan = attrs["loan"]["uuid"]
+        try:
+            loan = Loan.objects.get(uuid=loan)
+        except Loan.DoesNotExist as e:
+            raise ValidationError(
+                {"loan": f'Pk inválido "{loan}" - objeto não existe.'},
+                code="does_not_exist",
+            ) from e
+
+        attrs["loan"] = loan
+
+        return attrs
