@@ -15,6 +15,7 @@ def test_positive_serialization_objs_list(two_loans):
         assert data["uuid"] == str(db.uuid)
         assert data["nominal_value"] == str(db.nominal_value)
         assert data["interest_rate"] == str(db.interest_rate)
+        assert data["payments"] == [p["id"] for p in db.payments.values("id")]
         assert data["register_ip"] == db.register_ip
         assert data["bank"] == db.bank
         assert data["created_at"] == db.created_at.astimezone().isoformat()
@@ -32,6 +33,7 @@ def test_positive_serialization_one_obj(loan):
     assert data["uuid"] == str(loan.uuid)
     assert data["nominal_value"] == str(loan.nominal_value)
     assert data["interest_rate"] == str(loan.interest_rate)
+    assert data["payments"] == [p["id"] for p in loan.payments.values("id")]
     assert data["register_ip"] == loan.register_ip
     assert data["bank"] == loan.bank
     assert data["created_at"] == loan.created_at.astimezone().isoformat()

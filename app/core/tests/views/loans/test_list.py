@@ -23,6 +23,7 @@ def test_positive(client_api_auth, loans_of_two_users):
         assert b["nominal_value"] == str(e.nominal_value)
         assert b["interest_rate"] == str(e.interest_rate)
         assert b["register_ip"] == e.register_ip
+        assert b["payments"] == [p["id"] for p in e.payments.values("id")]
         assert b["bank"] == e.bank
         assert b["created_at"] == e.created_at.astimezone().isoformat()
         assert b["modified_at"] == e.modified_at.astimezone().isoformat()
