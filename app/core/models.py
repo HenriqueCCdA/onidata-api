@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from app.accounts.models import CreationModificationBase
@@ -9,8 +10,8 @@ from app.accounts.models import CreationModificationBase
 class Loan(CreationModificationBase, models.Model):
 
     uuid = models.UUIDField(default=uuid4, editable=False, unique=True)
-    nominal_value = models.DecimalField(max_digits=14, decimal_places=2)
-    interest_rate = models.DecimalField(max_digits=14, decimal_places=2)
+    nominal_value = models.DecimalField(max_digits=14, decimal_places=2, validators=[MinValueValidator(0.00)])
+    interest_rate = models.DecimalField(max_digits=14, decimal_places=2, validators=[MinValueValidator(0.00)])
     register_ip = models.GenericIPAddressField()
     bank = models.CharField(max_length=100)
 
