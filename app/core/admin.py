@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from .models import Loan
+from .models import Loan, Payment
 
 
 @admin.register(Loan)
@@ -66,3 +66,48 @@ class LoanAdmin(admin.ModelAdmin):
         "id",
         "uuid",
     )
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+
+    fieldsets = (
+        (
+            None,
+            {"fields": ("id",)},
+        ),
+        (
+            _("Payment infos"),
+            {
+                "fields": (
+                    "loan",
+                    "value",
+                )
+            },
+        ),
+        (
+            _("Important dates"),
+            {
+                "fields": (
+                    "created_at",
+                    "modified_at",
+                )
+            },
+        ),
+    )
+
+    list_display = (
+        "id",
+        "value",
+        "loan",
+        "created_at",
+        "modified_at",
+    )
+
+    readonly_fields = (
+        "id",
+        "created_at",
+        "modified_at",
+    )
+
+    list_display_links = ("id",)

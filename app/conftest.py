@@ -5,7 +5,7 @@ from model_bakery import baker
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
-from app.core.models import Loan
+from app.core.models import Loan, Payment
 
 User = get_user_model()
 
@@ -44,6 +44,11 @@ def loan(user):
 @pytest.fixture()
 def two_loans(user):
     return baker.make(Loan, user=user, _quantity=2)
+
+
+@pytest.fixture()
+def payment(loan):
+    return baker.make(Payment, loan=loan)
 
 
 @pytest.fixture()
