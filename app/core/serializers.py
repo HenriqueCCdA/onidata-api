@@ -14,6 +14,7 @@ class LoanSerializer(serializers.ModelSerializer):
             "nominal_value",
             "interest_rate",
             "register_ip",
+            "payments",
             "bank",
             "created_at",
             "modified_at",
@@ -24,6 +25,7 @@ class LoanSerializer(serializers.ModelSerializer):
             "created_at": {"read_only": True},
             "modified_at": {"read_only": True},
             "register_ip": {"read_only": True},
+            "payments": {"read_only": True},
         }
 
     def create(self, validate_data):
