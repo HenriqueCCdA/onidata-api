@@ -2,15 +2,13 @@ import pytest
 from django.shortcuts import resolve_url
 from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 
-URL = resolve_url("whoiam")
+URL = resolve_url("accounts:whoiam")
 
 
 @pytest.mark.integration()
-def test_positive(client_api, user_with_token):
+def test_positive(client_api_auth, user_with_token):
 
-    client_api.credentials(HTTP_AUTHORIZATION="Token " + user_with_token.auth_token.key)
-
-    response = client_api.get(URL)
+    response = client_api_auth.get(URL)
 
     assert response.status_code == HTTP_200_OK
 

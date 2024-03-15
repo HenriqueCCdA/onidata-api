@@ -13,11 +13,6 @@ fake = Faker()
 
 
 @pytest.fixture()
-def client_api():
-    return APIClient()
-
-
-@pytest.fixture()
 def user(db):
     return baker.make(User)
 
@@ -49,3 +44,22 @@ def loan(user):
 @pytest.fixture()
 def two_loans(user):
     return baker.make(Loan, user=user, _quantity=2)
+
+
+@pytest.fixture()
+def loans_of_two_users(user_with_token, other_user):
+    return {
+        "user_with_token": baker.make(Loan, user=user_with_token, _quantity=2),
+        "other_user": baker.make(Loan, user=other_user, _quantity=3),
+    }
+
+
+@pytest.fixture()
+def client_api():
+    return APIClient()
+
+
+@pytest.fixture()
+def client_api_auth(client_api, user_with_token):
+    client_api.credentials(HTTP_AUTHORIZATION="Token " + user_with_token.auth_token.key)
+    return client_api

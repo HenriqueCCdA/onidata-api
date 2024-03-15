@@ -2,7 +2,7 @@ import pytest
 from django.shortcuts import resolve_url
 from rest_framework.status import HTTP_200_OK
 
-URL = resolve_url("api_version")
+URL = resolve_url("core:api-version")
 
 
 @pytest.mark.integration()

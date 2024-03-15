@@ -6,7 +6,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
 fake = Faker()
 
-URL = resolve_url("get_token")
+URL = resolve_url("accounts:get-token")
 
 
 @pytest.mark.integration()
