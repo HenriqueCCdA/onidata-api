@@ -1,12 +1,11 @@
 from decimal import Decimal
-from uuid import uuid4
 
 import pytest
 from django.test import RequestFactory
 
 from app.conftest import fake
 from app.core.models import Payment
-from app.core.services import TotalPaymentLoanNotFound, extract_client_id, total_payment_for_the_loan
+from app.core.services import extract_client_id, total_payment_for_the_loan
 
 
 @pytest.mark.unity()
@@ -40,7 +39,7 @@ def test_positive_loan_payments_sum(loan):
         ]
     )
 
-    total = total_payment_for_the_loan(loan.uuid)
+    total = total_payment_for_the_loan(loan)
 
     assert total == Decimal(1500.00)
 
@@ -48,16 +47,6 @@ def test_positive_loan_payments_sum(loan):
 @pytest.mark.integration()
 def test_negative_loan_payments_sum_without_any_payments(loan):
 
-    total = total_payment_for_the_loan(loan.uuid)
+    total = total_payment_for_the_loan(loan)
 
     assert total == Decimal(0.00)
-
-
-@pytest.mark.integration()
-def test_negative_loan_payments_sum_loan_not_exists(db):
-
-    uuid = uuid4()
-    msg = f'Emprestimo com o "{uuid}" não existe.'
-
-    with pytest.raises(TotalPaymentLoanNotFound, match=msg):
-        total_payment_for_the_loan(uuid)

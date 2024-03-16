@@ -1,9 +1,6 @@
-import uuid
 from decimal import Decimal
 
 from django.db.models import Sum
-
-from app.core.models import Loan
 
 ZERO = Decimal("0.00")
 
@@ -31,22 +28,14 @@ def extract_client_id(meta: dict) -> str:
     return ip
 
 
-def total_payment_for_the_loan(uuid: uuid) -> Decimal:
+def total_payment_for_the_loan(loan) -> Decimal:
     """Calcula o total já pago para um determinado emprestimo
 
     Args:
-        uuid (uuid): Identificador unico do emprestimo
-
-    Raises:
-        TotalPaymentLoanNotFound: Retorna um erro caso o emprestimo não seja achado.
+        loan: Emprestimo
 
     Returns:
         Decimal: Soma do valor total pago.
     """
-
-    try:
-        loan = Loan.objects.get(uuid=uuid)
-    except Loan.DoesNotExist as e:
-        raise TotalPaymentLoanNotFound(uuid) from e
 
     return loan.payments.aggregate(total=Sum("value", default=ZERO))["total"]

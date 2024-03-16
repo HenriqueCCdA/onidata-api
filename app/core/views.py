@@ -8,8 +8,8 @@ from rest_framework.views import APIView
 
 from app.core.models import Loan, Payment
 from app.core.permission import UserOnlyCanAccessOwnLoan, UserOnlyCanAccessOwnPayment
-from app.core.serializers import LoanSerializer, PaymentSerializer
-from app.core.services import extract_client_id
+from app.core.serializers import LoanSerializer, PaymentSerializer, PaymentSumSerializer
+from app.core.services import extract_client_id, total_payment_for_the_loan
 
 
 @extend_schema(tags=["debug"])
@@ -71,6 +71,22 @@ class LoanPaymentList(APIView):
         return Response(serialize.data)
 
 
+class LoanPaymentSum(APIView):
+    serializer_class = PaymentSumSerializer
+
+    def get(self, request, id):
+        """Soma os pagamentos feitos para um emprestimo especifico"""
+
+        loan = get_object_or_404(Loan, uuid=id, user=self.request.user)
+
+        total = total_payment_for_the_loan(loan)
+
+        serialize = PaymentSumSerializer(data={"total": total})
+        serialize.is_valid(raise_exception=True)
+
+        return Response(serialize.data)
+
+
 class PaymentLC(ListCreateAPIView):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -110,6 +126,7 @@ class PaymentRetrieve(RetrieveAPIView):
 loans_lc = LoansLC.as_view()
 loan_retrieve = LoanRetrieve.as_view()
 loan_payment_list = LoanPaymentList.as_view()
+loan_payment_sum = LoanPaymentSum.as_view()
 
 payment_lc = PaymentLC.as_view()
 payment_retrieve = PaymentRetrieve.as_view()

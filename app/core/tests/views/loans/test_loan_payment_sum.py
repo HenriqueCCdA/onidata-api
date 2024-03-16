@@ -4,11 +4,11 @@ import pytest
 from django.shortcuts import resolve_url
 from rest_framework import status
 
-END_POINT_NAME = "core:loan-payment-list"
+END_POINT_NAME = "core:loan-payment-sum"
 
 
 @pytest.mark.integration()
-def test_positive(client_api_auth, loan, two_payments):
+def test_positive_with_payments(client_api_auth, loan, two_payments):
 
     url = resolve_url(END_POINT_NAME, loan.uuid)
 
@@ -18,19 +18,26 @@ def test_positive(client_api_auth, loan, two_payments):
 
     body = response.json()
 
-    payments_of_loan = two_payments
-
-    assert len(body) == 2
-
-    for b, e in zip(body, payments_of_loan):
-        assert b["loan"] == str(e.loan.uuid)
-        assert b["value"] == str(e.value)
-        assert b["created_at"] == e.created_at.astimezone().isoformat()
-        assert b["modified_at"] == e.modified_at.astimezone().isoformat()
+    expected_sum = sum(p.value for p in two_payments)
+    assert body["total"] == str(expected_sum)
 
 
 @pytest.mark.integration()
-def test_negative_user_not_must_list_other_user_loan(client_api_auth, other_user_loan):
+def test_positive_without_payments(client_api_auth, loan):
+
+    url = resolve_url(END_POINT_NAME, loan.uuid)
+
+    response = client_api_auth.get(url)
+
+    assert response.status_code == status.HTTP_200_OK
+
+    body = response.json()
+
+    assert body["total"] == "0.00"
+
+
+@pytest.mark.integration()
+def test_negative_user_cannot_add_another_user_payment(client_api_auth, other_user_loan):
 
     url = resolve_url(END_POINT_NAME, other_user_loan.uuid)
 
