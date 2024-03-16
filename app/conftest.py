@@ -65,6 +65,18 @@ def loans_of_two_users(user_with_token, other_user):
 
 
 @pytest.fixture()
+def payments_of_two_users(user_with_token, other_user):
+
+    loan = baker.make(Loan, user=user_with_token)
+    loan_other_user = baker.make(Loan, user=other_user)
+
+    return {
+        "user_with_token": baker.make(Payment, loan=loan, _quantity=3),
+        "other_user": baker.make(Payment, loan=loan_other_user, _quantity=2),
+    }
+
+
+@pytest.fixture()
 def client_api():
     return APIClient()
 
