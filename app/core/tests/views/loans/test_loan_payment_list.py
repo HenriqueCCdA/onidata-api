@@ -2,10 +2,7 @@ from uuid import uuid4
 
 import pytest
 from django.shortcuts import resolve_url
-from model_bakery import baker
 from rest_framework import status
-
-from app.core.models import Loan
 
 END_POINT_NAME = "core:loan-payment-list"
 
@@ -33,11 +30,9 @@ def test_positive(client_api_auth, loan, two_payments):
 
 
 @pytest.mark.integration()
-def test_negative_user_not_must_list_loan_of_other_user(client_api_auth, loan, other_user):
+def test_negative_user_not_must_list_other_user_loan(client_api_auth, other_user_loan):
 
-    loan = baker.make(Loan, user=other_user)
-
-    url = resolve_url(END_POINT_NAME, loan.uuid)
+    url = resolve_url(END_POINT_NAME, other_user_loan.uuid)
 
     response = client_api_auth.get(url)
 
