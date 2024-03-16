@@ -83,12 +83,16 @@ def test_negative_missing_fields(field, create_payment_payload):
         "loan_id_not_exists",
     ],
 )
-def test_negative_validation_errors(field, value, error, create_payment_payload):
+def test_negative_validation_errors(field, value, error, create_payment_payload, user_with_token):
     data = create_payment_payload.copy()
+
+    request = RequestFactory().request()
+
+    request.user = user_with_token
 
     data[field] = value
 
-    serializer = PaymentSerializer(data=data)
+    serializer = PaymentSerializer(data=data, context={"request": request})
 
     assert not serializer.is_valid()
 
@@ -96,9 +100,13 @@ def test_negative_validation_errors(field, value, error, create_payment_payload)
 
 
 @pytest.mark.integration()
-def test_positive_create(create_payment_payload):
+def test_positive_create(create_payment_payload, user_with_token):
 
-    serializer = PaymentSerializer(data=create_payment_payload)
+    request = RequestFactory().request()
+
+    request.user = user_with_token
+
+    serializer = PaymentSerializer(data=create_payment_payload, context={"request": request})
 
     assert serializer.is_valid()
 

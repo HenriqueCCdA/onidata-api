@@ -73,9 +73,21 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
 
+        attrs = super().validate(attrs)
+
+        try:
+            request = self.context["request"]
+        except KeyError as e:
+            raise ValidationError("O request precisa estar no contexto.", code="invalid") from e
+
+        try:
+            user = request.user
+        except (KeyError, AttributeError) as e:
+            raise ValidationError("O user precisa estar no contexto.", code="invalid") from e
+
         loan = attrs["loan"]["uuid"]
         try:
-            loan = Loan.objects.get(uuid=loan)
+            loan = Loan.objects.get(uuid=loan, user=user)
         except Loan.DoesNotExist as e:
             raise ValidationError(
                 {"loan": f'Pk inválido "{loan}" - objeto não existe.'},
