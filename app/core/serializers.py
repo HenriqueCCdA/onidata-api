@@ -5,6 +5,10 @@ from app.core.models import Loan, Payment
 from app.core.services import extract_client_id
 
 
+class PaymentSumSerializer(serializers.Serializer):
+    total = serializers.DecimalField(max_digits=14, decimal_places=2)
+
+
 class LoanSerializer(serializers.ModelSerializer):
 
     class Meta:

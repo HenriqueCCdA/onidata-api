@@ -8,6 +8,7 @@ urlpatterns = [
     #
     path("loans/", views.loans_lc, name="loans-list-create"),
     path("loans/<uuid:id>/payments/", views.loan_payment_list, name="loan-payment-list"),
+    path("loans/<uuid:id>/payments/total/", views.loan_payment_sum, name="loan-payment-sum"),
     path("loans/<uuid:id>/", views.loan_retrieve, name="loan-retrieve"),
     #
     path("payments/", views.payment_lc, name="payments-list-create"),
