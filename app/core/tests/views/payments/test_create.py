@@ -25,11 +25,11 @@ def test_positive(client_api_auth, create_payment_payload):
 
 
 @pytest.mark.integration()
-def test_negative_user_not_must_pay_loan_of_other_user(client_api_auth, create_payment_payload, loan_of_other_user):
+def test_negative_user_not_must_pay_other_user_loan(client_api_auth, create_payment_payload, other_user_loan):
 
     data = create_payment_payload.copy()
 
-    data["loan"] = loan_of_other_user.uuid
+    data["loan"] = other_user_loan.uuid
 
     response = client_api_auth.post(URL, data=data, format="json")
 
@@ -39,7 +39,7 @@ def test_negative_user_not_must_pay_loan_of_other_user(client_api_auth, create_p
 
     body = response.json()
 
-    assert body == {"loan": [f'Pk inválido "{loan_of_other_user.uuid}" - objeto não existe.']}
+    assert body == {"loan": [f'Pk inválido "{other_user_loan.uuid}" - objeto não existe.']}
 
 
 @pytest.mark.integration()

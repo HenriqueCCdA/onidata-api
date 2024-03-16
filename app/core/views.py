@@ -1,11 +1,13 @@
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app.core.models import Loan, Payment
+from app.core.permission import OnlyUserCanAccessOwnLoan
 from app.core.serializers import LoanSerializer, PaymentSerializer
 from app.core.services import extract_client_id
 
@@ -76,6 +78,25 @@ class PaymentLC(ListCreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
+class LoanRetrieve(RetrieveAPIView):
+    serializer_class = LoanSerializer
+    queryset = Loan.objects.all()
+    permission_classes = (
+        OnlyUserCanAccessOwnLoan,
+        IsAuthenticated,
+    )
+    lookup_field = "uuid"
+    lookup_url_kwarg = "id"
+
+    @extend_schema(summary="Recupera o emprestimo")
+    def get(self, request, *args, **kwargs):
+        """Recupera o emprestimo do usuario. O usuario é
+        obtido pelo Token.
+        """
+        return super().get(request, *args, **kwargs)
+
+
 loans_lc = LoansLC.as_view()
+loan_retrieve = LoanRetrieve.as_view()
 payment_lc = PaymentLC.as_view()
 loan_payment_list = LoanPaymentList.as_view()

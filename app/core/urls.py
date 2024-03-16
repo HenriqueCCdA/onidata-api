@@ -1,11 +1,14 @@
 from django.urls import path
 
-from .views import get_client_ip, loan_payment_list, loans_lc, payment_lc
+from . import views
 
 app_name = "core"
 urlpatterns = [
-    path("get_client_ip/", get_client_ip, name="get-client-ip"),
-    path("loans/", loans_lc, name="loans-list-create"),
-    path("loans/<uuid:id>/", loan_payment_list, name="loan-payment-list"),
-    path("payments/", payment_lc, name="payments-list-create"),
+    path("get_client_ip/", views.get_client_ip, name="get-client-ip"),
+    #
+    path("loans/", views.loans_lc, name="loans-list-create"),
+    path("loans/<uuid:id>/payments/", views.loan_payment_list, name="loan-payment-list"),
+    path("loans/<uuid:id>/", views.loan_retrieve, name="loan-retrieve"),
+    #
+    path("payments/", views.payment_lc, name="payments-list-create"),
 ]

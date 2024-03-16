@@ -42,7 +42,7 @@ def loan(user_with_token):
 
 
 @pytest.fixture()
-def loan_of_other_user(other_user):
+def other_user_loan(other_user):
     return baker.make(Loan, user=other_user)
 
 
