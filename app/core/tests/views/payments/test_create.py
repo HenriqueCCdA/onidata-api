@@ -25,6 +25,24 @@ def test_positive(client_api_auth, create_payment_payload):
 
 
 @pytest.mark.integration()
+def test_negative_user_not_must_pay_loan_of_other_user(client_api_auth, create_payment_payload, loan_of_other_user):
+
+    data = create_payment_payload.copy()
+
+    data["loan"] = loan_of_other_user.uuid
+
+    response = client_api_auth.post(URL, data=data, format="json")
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    assert not Payment.objects.exists()
+
+    body = response.json()
+
+    assert body == {"loan": [f'Pk inválido "{loan_of_other_user.uuid}" - objeto não existe.']}
+
+
+@pytest.mark.integration()
 @pytest.mark.parametrize(
     ("field", "value", "error"),
     [
@@ -70,13 +88,7 @@ def test_negative_invalid_value(client_api_auth, create_payment_payload, field, 
 
 
 @pytest.mark.integration()
-@pytest.mark.parametrize(
-    "field",
-    [
-        "value",
-        "loan",
-    ],
-)
+@pytest.mark.parametrize("field", ["value", "loan"])
 def test_negative_missing_fields(client_api_auth, create_payment_payload, field):
 
     data = create_payment_payload.copy()

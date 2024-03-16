@@ -1,14 +1,11 @@
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
-from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import ListCreateAPIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app.core.models import Loan, Payment
-from app.core.permission import OnlyUserCanAccessOwnLoan
 from app.core.serializers import LoanSerializer, PaymentSerializer
 from app.core.services import extract_client_id
 
@@ -46,8 +43,6 @@ class LoansLC(ListCreateAPIView):
 
 class LoanPaymentList(APIView):
     serializer_class = PaymentSerializer
-    permission_classes = (OnlyUserCanAccessOwnLoan, IsAuthenticated)
-    authentication_classes = (TokenAuthentication,)
 
     def get(self, request, id):
         """List do pagamentos de um emprestimo especifico"""
