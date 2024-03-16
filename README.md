@@ -1,8 +1,8 @@
 # onidata-api
 
-[![Backend](https://github.com/HenriqueCCdA/drf_authtoken/actions/workflows/CI.yml/badge.svg)](https://github.com/HenriqueCCdA/drf_authtoken/actions/workflows/CI.yml)
+[![Backend](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml/badge.svg)](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml)
 
-Projeto com a base com o `AuthToken` do `DRF`. As libs utilizadas foram: `django`, `restframework`, `gunicorn`, `python-decouple`, `drf-spectacular` e `django-extensions`. Ferramentas de desenvolvimento utilizadas foram `ruff`, `black`, `pytest` e `taskipy`.
+As libs utilizadas foram: `django`, `restframework`, `gunicorn`, `python-decouple`, `drf-spectacular` e `django-extensions`. Ferramentas de desenvolvimento utilizadas foram `ruff`, `black`, `pytest` e `taskipy`.
 
 A documentação da `api` fica disponível em `/docs/`.
 
