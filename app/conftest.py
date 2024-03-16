@@ -57,6 +57,11 @@ def payment(loan):
 
 
 @pytest.fixture()
+def other_user_payment(other_user_loan):
+    return baker.make(Payment, loan=other_user_loan)
+
+
+@pytest.fixture()
 def two_payments(loan):
     return baker.make(Payment, loan=loan, _quantity=2)
 

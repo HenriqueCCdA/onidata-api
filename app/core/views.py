@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from app.core.models import Loan, Payment
-from app.core.permission import OnlyUserCanAccessOwnLoan
+from app.core.permission import UserOnlyCanAccessOwnLoan, UserOnlyCanAccessOwnPayment
 from app.core.serializers import LoanSerializer, PaymentSerializer
 from app.core.services import extract_client_id
 
@@ -43,8 +43,24 @@ class LoansLC(ListCreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
+class LoanRetrieve(RetrieveAPIView):
+    serializer_class = LoanSerializer
+    queryset = Loan.objects.all()
+    permission_classes = (UserOnlyCanAccessOwnLoan, IsAuthenticated)
+    lookup_field = "uuid"
+    lookup_url_kwarg = "id"
+
+    @extend_schema(summary="Recupera um emprestimo")
+    def get(self, request, *args, **kwargs):
+        """Recupera um emprestimo do usuario. O usuario é
+        obtido pelo Token.
+        """
+        return super().get(request, *args, **kwargs)
+
+
 class LoanPaymentList(APIView):
     serializer_class = PaymentSerializer
+    permission_classes = (UserOnlyCanAccessOwnPayment, IsAuthenticated)
 
     def get(self, request, id):
         """List do pagamentos de um emprestimo especifico"""
@@ -78,19 +94,14 @@ class PaymentLC(ListCreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
-class LoanRetrieve(RetrieveAPIView):
-    serializer_class = LoanSerializer
-    queryset = Loan.objects.all()
-    permission_classes = (
-        OnlyUserCanAccessOwnLoan,
-        IsAuthenticated,
-    )
-    lookup_field = "uuid"
-    lookup_url_kwarg = "id"
+class PaymentRetrieve(RetrieveAPIView):
+    serializer_class = PaymentSerializer
+    queryset = Payment.objects.all()
+    permission_classes = (UserOnlyCanAccessOwnPayment, IsAuthenticated)
 
-    @extend_schema(summary="Recupera o emprestimo")
+    @extend_schema(summary="Recupera um pagamento")
     def get(self, request, *args, **kwargs):
-        """Recupera o emprestimo do usuario. O usuario é
+        """Recupera um pagamento do usuario. O usuario é
         obtido pelo Token.
         """
         return super().get(request, *args, **kwargs)
@@ -98,5 +109,7 @@ class LoanRetrieve(RetrieveAPIView):
 
 loans_lc = LoansLC.as_view()
 loan_retrieve = LoanRetrieve.as_view()
-payment_lc = PaymentLC.as_view()
 loan_payment_list = LoanPaymentList.as_view()
+
+payment_lc = PaymentLC.as_view()
+payment_retrieve = PaymentRetrieve.as_view()
