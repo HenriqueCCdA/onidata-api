@@ -21,7 +21,7 @@ class Loan(CreationModificationBase, models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING, related_name="loans")
 
     def __str__(self):
-        return f"loan(uuid={self.uuid},value={self.nominal_value})"
+        return f"(id={self.id},user={self.user},value={self.nominal_value})"
 
 
 class Payment(CreationModificationBase, models.Model):
@@ -30,4 +30,4 @@ class Payment(CreationModificationBase, models.Model):
     value = models.DecimalField(max_digits=14, decimal_places=2, validators=[MinValueValidator(0.00)])
 
     def __str__(self):
-        return f"payment(id={self.id},loan_uuid={self.loan.uuid},value={self.value})"
+        return f"(id={self.id},loan_id={self.loan.id},value={self.value})"
