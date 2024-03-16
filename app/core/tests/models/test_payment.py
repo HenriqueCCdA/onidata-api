@@ -30,7 +30,7 @@ def test_create_at_and_modified_at(payment):
 
 @pytest.mark.integration()
 def test_str(payment):
-    assert str(payment) == f"payment(id={payment.id},loan_uuid={payment.loan.uuid},value={payment.value})"
+    assert str(payment) == f"(id={payment.id},loan_id={payment.loan.id},value={payment.value})"
 
 
 @pytest.mark.integration()

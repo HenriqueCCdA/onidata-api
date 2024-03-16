@@ -37,13 +37,13 @@ def user_with_token(user_with_password):
 
 
 @pytest.fixture()
-def loan(user):
-    return baker.make(Loan, user=user)
+def loan(user_with_token):
+    return baker.make(Loan, user=user_with_token)
 
 
 @pytest.fixture()
-def two_loans(user):
-    return baker.make(Loan, user=user, _quantity=2)
+def two_loans(user_with_token):
+    return baker.make(Loan, user=user_with_token, _quantity=2)
 
 
 @pytest.fixture()

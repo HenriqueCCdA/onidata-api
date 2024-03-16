@@ -56,11 +56,11 @@ def test_create_at_and_modified_at(loan):
 
 @pytest.mark.unity()
 def test_str(loan):
-    assert str(loan) == f"loan(uuid={loan.uuid},value={loan.nominal_value})"
+    assert str(loan) == f"(id={loan.id},user={loan.user},value={loan.nominal_value})"
 
 
 @pytest.mark.integration()
-def test_relationship(two_loans, user):
-    assert user.loans.count() == 2
-    assert two_loans[0].user == user
-    assert two_loans[1].user == user
+def test_relationship(two_loans, user_with_token):
+    assert user_with_token.loans.count() == 2
+    assert two_loans[0].user == user_with_token
+    assert two_loans[1].user == user_with_token
