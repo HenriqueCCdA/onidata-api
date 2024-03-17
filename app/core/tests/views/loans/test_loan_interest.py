@@ -15,7 +15,7 @@ def test_positive(mocker, client_api_auth, loan_10000_with_10_interest_rate):
     url = resolve_url(END_POINT_NAME, loan_10000_with_10_interest_rate.uuid)
 
     time = timezone.now() + timedelta(days=60)
-    mocker.patch("app.core.views.now", return_value=time)
+    mocker.patch("app.core.views.loan.now", return_value=time)
 
     response = client_api_auth.get(url)
 
@@ -33,7 +33,7 @@ def test_positive_simple_interest(mocker, client_api_auth, loan_10000_with_10_in
     url = resolve_url(END_POINT_NAME, loan_10000_with_10_interest_rate.uuid)
 
     time = timezone.now() + timedelta(days=60)
-    mocker.patch("app.core.views.now", return_value=time)
+    mocker.patch("app.core.views.loan.now", return_value=time)
 
     response = client_api_auth.get(f"{url}?interest=simple")
 
@@ -51,7 +51,7 @@ def test_positive_compound_interest(mocker, client_api_auth, loan_10000_with_10_
     url = resolve_url(END_POINT_NAME, loan_10000_with_10_interest_rate.uuid)
 
     time = timezone.now() + timedelta(days=60)
-    mocker.patch("app.core.views.now", return_value=time)
+    mocker.patch("app.core.views.loan.now", return_value=time)
 
     response = client_api_auth.get(f"{url}?interest=compound")
 
