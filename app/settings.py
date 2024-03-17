@@ -155,3 +155,6 @@ SHELL_PLUS_IMPORTS = [
     "from app.core.serializers import LoanSerializer, PaymentSerializer",
     "from app.core.services import extract_client_id",
 ]
+
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
