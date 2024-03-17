@@ -16,16 +16,17 @@ DECIMAL_PLACES = 2
 class Loan(CreationModificationBase, models.Model):
 
     uuid = models.UUIDField(default=uuid4, editable=False, unique=True)
-    nominal_value = models.DecimalField(
+    value = models.DecimalField(
         max_digits=DECIMAL_MAX_DIGITS,
         decimal_places=DECIMAL_PLACES,
         validators=[MinValueValidator(0.00)],
     )
-    interest_rate = models.DecimalField(
+    rate = models.DecimalField(
         max_digits=DECIMAL_MAX_DIGITS,
         decimal_places=DECIMAL_PLACES,
         validators=[MinValueValidator(0.00)],
     )
+    contracted_period = models.PositiveSmallIntegerField()
     register_ip = models.GenericIPAddressField()
     bank = models.CharField(max_length=100)
 

@@ -26,8 +26,9 @@ class LoanAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "uuid",
-                    "nominal_value",
-                    "interest_rate",
+                    "value",
+                    "rate",
+                    "contracted_period",
                     "bank",
                 )
             },
@@ -47,8 +48,9 @@ class LoanAdmin(admin.ModelAdmin):
         "id",
         "uuid",
         "user",
-        "nominal_value",
-        "interest_rate",
+        "value",
+        "rate",
+        "contracted_period",
         "register_ip",
         "bank",
         "created_at",

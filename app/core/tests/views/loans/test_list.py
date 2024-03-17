@@ -20,8 +20,9 @@ def test_positive(client_api_auth, loans_of_two_users):
 
     for b, e in zip(body, loan_of_user_with_token):
         assert b["uuid"] == str(e.uuid)
-        assert b["nominal_value"] == str(e.nominal_value)
-        assert b["interest_rate"] == str(e.interest_rate)
+        assert b["value"] == str(e.value)
+        assert b["rate"] == str(e.rate)
+        assert b["contracted_period"] == e.contracted_period
         assert b["register_ip"] == e.register_ip
         assert b["payments"] == [p["id"] for p in e.payments.values("id")]
         assert b["bank"] == e.bank

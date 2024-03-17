@@ -19,8 +19,9 @@ def test_positive(client_api_auth, loan):
     body = response.json()
 
     assert body["uuid"] == str(loan.uuid)
-    assert body["nominal_value"] == str(loan.nominal_value)
-    assert body["interest_rate"] == str(loan.interest_rate)
+    assert body["value"] == str(loan.value)
+    assert body["rate"] == str(loan.rate)
+    assert body["contracted_period"] == loan.contracted_period
     assert body["register_ip"] == loan.register_ip
     assert body["payments"] == [p["id"] for p in loan.payments.values("id")]
     assert body["bank"] == loan.bank

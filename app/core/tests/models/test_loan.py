@@ -8,8 +8,9 @@ from app.core.models import Loan
 @pytest.mark.unity()
 def test_model_fiels():
     assert Loan._meta.get_field("uuid")
-    assert Loan._meta.get_field("nominal_value")
-    assert Loan._meta.get_field("interest_rate")
+    assert Loan._meta.get_field("value")
+    assert Loan._meta.get_field("rate")
+    assert Loan._meta.get_field("contracted_period")
     assert Loan._meta.get_field("register_ip")
     assert Loan._meta.get_field("bank")
     assert Loan._meta.get_field("user")
@@ -29,17 +30,17 @@ def test_model_metadata_uuid():
 @pytest.mark.unity()
 def test_model_metadata_nominal_value():
 
-    nominal_value = Loan._meta.get_field("nominal_value")
-    assert nominal_value.max_digits == 14
-    assert nominal_value.decimal_places == 2
+    value = Loan._meta.get_field("value")
+    assert value.max_digits == 14
+    assert value.decimal_places == 2
 
 
 @pytest.mark.unity()
 def test_model_metadata_interest_rate():
 
-    interest_rate = Loan._meta.get_field("interest_rate")
-    assert interest_rate.max_digits == 14
-    assert interest_rate.decimal_places == 2
+    rate = Loan._meta.get_field("rate")
+    assert rate.max_digits == 14
+    assert rate.decimal_places == 2
 
 
 @pytest.mark.unity()

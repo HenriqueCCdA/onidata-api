@@ -1,7 +1,6 @@
 from dataclasses import asdict
 
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
@@ -14,10 +13,6 @@ from app.core.permission import UserOnlyCanAccessOwnLoan, UserOnlyCanAccessOwnPa
 from app.core.serializers import DebtLoanSerializer, LoanSerializer, PaymentSerializer, PaymentSumSerializer
 from app.core.services import extract_client_id, total_payment_for_the_loan
 from app.core.services import loan_with_interest as loan_with_interest_
-
-
-def now():
-    return timezone.now()
 
 
 @extend_schema(tags=["debug"])
@@ -107,9 +102,7 @@ class LoanWithInterest(APIView):
         if self.request.query_params.get("interest") == "compound":
             compound_interest = True
 
-        result = loan_with_interest_(
-            loan.nominal_value, loan.interest_rate, loan.created_at, now(), compound_interest=compound_interest
-        )
+        result = loan_with_interest_(loan.value, loan.rate, loan.contracted_period, compound_interest=compound_interest)
 
         serialize = DebtLoanSerializer(data=asdict(result))
         serialize.is_valid(raise_exception=True)
