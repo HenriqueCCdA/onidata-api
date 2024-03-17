@@ -1,6 +1,8 @@
 from datetime import datetime
+from decimal import Decimal
 
 import pytest
+from model_bakery import baker
 
 from app.core.models import Loan
 
@@ -65,3 +67,23 @@ def test_relationship(two_loans, user_with_token):
     assert user_with_token.loans.count() == 2
     assert two_loans[0].user == user_with_token
     assert two_loans[1].user == user_with_token
+
+
+@pytest.mark.integration()
+def test_value_with_interest(loan_10000_with_10_interest_rate):
+
+    assert loan_10000_with_10_interest_rate.value_with_interest.total == Decimal("14000.00")
+    assert loan_10000_with_10_interest_rate.value_with_interest.interest == Decimal("4000.00")
+
+
+@pytest.mark.integration()
+def test_value_with_interest_call_once(mocker, db):
+
+    mock = mocker.patch("app.core.models.loan_with_interest")
+
+    loan = baker.make(Loan)
+
+    _ = loan.value_with_interest
+    _ = loan.value_with_interest
+
+    assert mock.call_count == 1
