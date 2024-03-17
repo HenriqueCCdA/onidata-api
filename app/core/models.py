@@ -3,8 +3,10 @@ from uuid import uuid4
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils.functional import cached_property
 
 from app.accounts.models import CreationModificationBase
+from app.core.services import loan_with_interest
 
 # TODO: Estou usando o created_at com data de solicitaçao e pagammento,
 # não tenho certeza se isso é bom. Pensar mellhor nisso depois
@@ -34,6 +36,10 @@ class Loan(CreationModificationBase, models.Model):
 
     def __str__(self):
         return str(self.uuid)
+
+    @cached_property
+    def value_with_interest(self):
+        return loan_with_interest(self.value, self.rate, self.contracted_period)
 
 
 class Payment(CreationModificationBase, models.Model):

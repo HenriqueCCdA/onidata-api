@@ -3,8 +3,6 @@ from decimal import Decimal
 
 from django.db.models import Sum
 
-from app.core.models import Loan
-
 ZERO = Decimal("0.00")
 
 
@@ -37,7 +35,7 @@ def extract_client_id(meta: dict) -> str:
     return ip
 
 
-def total_payment_for_the_loan(loan: Loan) -> Decimal:
+def total_payment_for_the_loan(loan) -> Decimal:
     """Calcula o total já pago para um determinado emprestimo
 
     Args:
