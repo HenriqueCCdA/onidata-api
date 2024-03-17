@@ -87,3 +87,11 @@ def test_value_with_interest_call_once(mocker, db):
     _ = loan.value_with_interest
 
     assert mock.call_count == 1
+
+
+@pytest.mark.integration()
+def test_amount_due(loan_with_payments):
+
+    due = loan_with_payments.amount_due
+
+    assert due == Decimal("12500.00")

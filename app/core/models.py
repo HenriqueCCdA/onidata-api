@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.functional import cached_property
 
 from app.accounts.models import CreationModificationBase
-from app.core.services import loan_with_interest
+from app.core.services import loan_with_interest, total_payment_for_the_loan
 
 # TODO: Estou usando o created_at com data de solicitaçao e pagammento,
 # não tenho certeza se isso é bom. Pensar mellhor nisso depois
@@ -40,6 +40,10 @@ class Loan(CreationModificationBase, models.Model):
     @cached_property
     def value_with_interest(self):
         return loan_with_interest(self.value, self.rate, self.contracted_period)
+
+    @property
+    def amount_due(self):
+        return self.value_with_interest.total - total_payment_for_the_loan(self)
 
 
 class Payment(CreationModificationBase, models.Model):
