@@ -37,7 +37,7 @@ repos:
     hooks:
       - id: pytest
         name: pytest
-        entry: pytest
+        entry: pytest -n 4
         language: python
         pass_filenames: false
         always_run: true

@@ -71,6 +71,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = (
+            "uuid",
             "value",
             "loan",
             "created_at",

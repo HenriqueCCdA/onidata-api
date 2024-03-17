@@ -13,5 +13,5 @@ urlpatterns = [
     path("loans/<uuid:id>/", views.loan_retrieve, name="loan-retrieve"),
     #
     path("payments/", views.payment_lc, name="payments-list-create"),
-    path("payments/<int:pk>/", views.payment_retrieve, name="payment-retrieve"),
+    path("payments/<uuid:id>/", views.payment_retrieve, name="payment-retrieve"),
 ]

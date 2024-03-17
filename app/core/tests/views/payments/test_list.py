@@ -19,6 +19,7 @@ def test_positive(client_api_auth, payments_of_two_users):
     assert len(body) == 3
 
     for b, e in zip(body, payments_of_user_with_token):
+        assert b["uuid"] == str(e.uuid)
         assert b["value"] == str(e.value)
         assert b["loan"] == str(e.loan.uuid)
         assert b["created_at"] == e.created_at.astimezone().isoformat()

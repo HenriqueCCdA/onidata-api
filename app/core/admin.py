@@ -80,6 +80,7 @@ class PaymentAdmin(admin.ModelAdmin):
             _("Payment infos"),
             {
                 "fields": (
+                    "uuid",
                     "loan",
                     "value",
                 )
@@ -98,16 +99,18 @@ class PaymentAdmin(admin.ModelAdmin):
 
     list_display = (
         "id",
-        "value",
+        "uuid",
         "loan",
+        "value",
         "created_at",
         "modified_at",
     )
 
     readonly_fields = (
         "id",
+        "uuid",
         "created_at",
         "modified_at",
     )
 
-    list_display_links = ("id",)
+    list_display_links = ("id", "uuid")
