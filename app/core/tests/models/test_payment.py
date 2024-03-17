@@ -8,10 +8,20 @@ from app.core.models import Payment
 
 @pytest.mark.unity()
 def test_model_fiels():
+    assert Payment._meta.get_field("uuid")
     assert Payment._meta.get_field("loan")
     assert Payment._meta.get_field("value")
     assert Payment._meta.get_field("created_at")
     assert Payment._meta.get_field("modified_at")
+
+
+@pytest.mark.unity()
+def test_model_metadata_uuid():
+
+    uuid = Payment._meta.get_field("uuid")
+
+    assert not uuid.editable
+    assert uuid.unique
 
 
 @pytest.mark.unity()
@@ -30,7 +40,7 @@ def test_create_at_and_modified_at(payment):
 
 @pytest.mark.integration()
 def test_str(payment):
-    assert str(payment) == f"(id={payment.id},loan_id={payment.loan.id},value={payment.value})"
+    assert str(payment) == str(payment.uuid)
 
 
 @pytest.mark.integration()

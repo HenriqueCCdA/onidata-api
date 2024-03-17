@@ -11,6 +11,7 @@ def test_positive_serialization_objs_list(two_payments):
 
     serializer = PaymentSerializer(instance=Payment.objects.all(), many=True, context={"request": request})
     for data, db in zip(serializer.data, two_payments):
+        assert data["uuid"] == str(db.uuid)
         assert data["loan"] == str(db.loan.uuid)
         assert data["value"] == str(db.value)
         assert data["created_at"] == db.created_at.astimezone().isoformat()
@@ -25,6 +26,7 @@ def test_positive_serialization_one_obj(payment):
 
     data = serializer.data
 
+    assert data["uuid"] == str(payment.uuid)
     assert data["loan"] == str(payment.loan.uuid)
     assert data["value"] == str(payment.value)
     assert data["created_at"] == payment.created_at.astimezone().isoformat()

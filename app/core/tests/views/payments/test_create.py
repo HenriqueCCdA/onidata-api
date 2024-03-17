@@ -18,6 +18,7 @@ def test_positive(client_api_auth, create_payment_payload):
 
     payment_from_db = Payment.objects.first()
 
+    assert body["uuid"] == str(payment_from_db.uuid)
     assert body["value"] == str(payment_from_db.value)
     assert body["loan"] == str(payment_from_db.loan.uuid)
     assert body["created_at"] == payment_from_db.created_at.astimezone().isoformat()

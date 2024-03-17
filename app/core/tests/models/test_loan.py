@@ -56,7 +56,7 @@ def test_create_at_and_modified_at(loan):
 
 @pytest.mark.unity()
 def test_str(loan):
-    assert str(loan) == f"(id={loan.id},user={loan.user},value={loan.nominal_value})"
+    assert str(loan) == str(loan.uuid)
 
 
 @pytest.mark.integration()

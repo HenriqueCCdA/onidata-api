@@ -144,6 +144,8 @@ class PaymentRetrieve(RetrieveAPIView):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     permission_classes = (UserOnlyCanAccessOwnPayment, IsAuthenticated)
+    lookup_field = "uuid"
+    lookup_url_kwarg = "id"
 
     @extend_schema(summary="Recupera um pagamento")
     def get(self, request, *args, **kwargs):
