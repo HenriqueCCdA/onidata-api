@@ -5,8 +5,15 @@ from app.core.models import Loan, Payment
 from app.core.services import extract_client_id
 
 
+# TODO: Testar
 class PaymentSumSerializer(serializers.Serializer):
     total = serializers.DecimalField(max_digits=14, decimal_places=2)
+
+
+# TODO: Testar
+class DebtLoanSerializer(serializers.Serializer):
+    total = serializers.DecimalField(max_digits=14, decimal_places=2)
+    interest = serializers.DecimalField(max_digits=14, decimal_places=2)
 
 
 class LoanSerializer(serializers.ModelSerializer):
