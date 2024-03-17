@@ -7,6 +7,7 @@ from app.core.permission import UserOnlyCanAccessOwnPayment
 from app.core.serializers import PaymentSerializer
 
 
+@extend_schema(tags=["Pagamentos"])
 class PaymentLC(ListCreateAPIView):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -18,18 +19,19 @@ class PaymentLC(ListCreateAPIView):
     @extend_schema(summary="Lista de pagamentos")
     def get(self, request, *args, **kwargs):
         """Retorna os pagamentos usuario. O usuario é
-        obtido pelo Token.
+        obtido pelo `Token`. O pagamento é definido pelo seu `uuid`.
         """
         return super().get(request, *args, **kwargs)
 
     @extend_schema(summary="Cria o pagamento para um emprestimo")
     def post(self, request, *args, **kwargs):
-        """Cria o pagamento para emprestimo.O usuario é
-        obtido pelo Token.
+        """Cria o pagamento para emprestimo. O usuario é
+        obtido pelo `Token`. O pagamento é definido pelo seu `uuid`.
         """
         return super().post(request, *args, **kwargs)
 
 
+@extend_schema(tags=["Pagamentos"])
 class PaymentRetrieve(RetrieveAPIView):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -40,7 +42,7 @@ class PaymentRetrieve(RetrieveAPIView):
     @extend_schema(summary="Recupera um pagamento")
     def get(self, request, *args, **kwargs):
         """Recupera um pagamento do usuario. O usuario é
-        obtido pelo Token.
+        obtido pelo `Token`. O pagamento é definido pelo seu `uuid`.
         """
         return super().get(request, *args, **kwargs)
 

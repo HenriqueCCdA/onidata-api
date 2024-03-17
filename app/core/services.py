@@ -12,11 +12,6 @@ class DebtLoan:
     interest: Decimal
 
 
-class TotalPaymentLoanNotFound(Exception):
-    def __init__(self, uuid):
-        super().__init__(self, f'Emprestimo com o "{uuid}" não existe.')
-
-
 def extract_client_id(meta: dict) -> str:
     """Obtem o IP do cliente.
 

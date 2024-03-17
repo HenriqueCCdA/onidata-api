@@ -16,6 +16,11 @@ class DebtLoanSerializer(serializers.Serializer):
     interest = serializers.DecimalField(max_digits=14, decimal_places=2)
 
 
+# TODO: Testar
+class AmountDueSerializer(serializers.Serializer):
+    due = serializers.DecimalField(max_digits=14, decimal_places=2)
+
+
 class LoanSerializer(serializers.ModelSerializer):
 
     class Meta:
