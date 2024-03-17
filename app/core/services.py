@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from decimal import Decimal
 
-from django.db.models import Sum
-
 ZERO = Decimal("0.00")
 
 
@@ -28,19 +26,6 @@ def extract_client_id(meta: dict) -> str:
         ip = meta.get("REMOTE_ADDR")
 
     return ip
-
-
-def total_payment_for_the_loan(loan) -> Decimal:
-    """Calcula o total já pago para um determinado emprestimo
-
-    Args:
-        loan: Emprestimo
-
-    Returns:
-        Decimal: Soma do valor total pago.
-    """
-
-    return loan.payments.aggregate(total=Sum("value", default=ZERO))["total"]
 
 
 # TODO: O código esta com problema de perda precisão verifiacar isso depois
