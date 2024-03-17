@@ -22,10 +22,9 @@
 | faker             | Geradores de dados Fake para testes                |
 | model-bakery      | Gerador de dados do Modelos do Djanfo para testes  |
 
-Deploy da aplicação no fly.io
-⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
-⚠️⚠️⚠️⚠️ [nidata-api.fly.dev](https://onidata-api.fly.dev/docs/) ⚠️⚠️⚠️⚠️
-⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+## Deploy
+
+Deploy da aplicação no fly.io: ⚠️⚠️⚠️⚠️ [onidata-api.fly.dev](https://onidata-api.fly.dev/) ⚠️⚠️⚠️⚠️
 
 
 ## Simulando o ambiente de produção
