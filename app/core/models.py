@@ -1,18 +1,21 @@
+from decimal import Decimal
 from uuid import uuid4
 
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.db.models import Sum
 from django.utils.functional import cached_property
 
 from app.accounts.models import CreationModificationBase
-from app.core.services import loan_with_interest, total_payment_for_the_loan
+from app.core.services import loan_with_interest
 
 # TODO: Estou usando o created_at com data de solicitaçao e pagammento,
 # não tenho certeza se isso é bom. Pensar mellhor nisso depois
 
 DECIMAL_MAX_DIGITS = 14
 DECIMAL_PLACES = 2
+ZERO = Decimal("0.00")
 
 
 class Loan(CreationModificationBase, models.Model):
@@ -43,7 +46,15 @@ class Loan(CreationModificationBase, models.Model):
 
     @property
     def amount_due(self):
-        return self.value_with_interest.total - total_payment_for_the_loan(self)
+        return self.value_with_interest.total - self.total_payments
+
+    @property
+    def total_payments(self):
+        """Calcula o total já pago para um determinado emprestimo
+        Returns:
+            Decimal: Soma do valor total pago.
+        """
+        return self.payments.aggregate(total=Sum("value", default=ZERO))["total"]
 
 
 class Payment(CreationModificationBase, models.Model):

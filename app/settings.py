@@ -153,5 +153,5 @@ SPECTACULAR_SETTINGS = {
 
 SHELL_PLUS_IMPORTS = [
     "from app.core.serializers import LoanSerializer, PaymentSerializer",
-    "from app.core.services import extract_client_id, total_payment_for_the_loan",
+    "from app.core.services import extract_client_id",
 ]

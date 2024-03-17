@@ -17,7 +17,6 @@ from app.core.serializers import (
     PaymentSumSerializer,
 )
 from app.core.services import loan_with_interest as loan_with_interest_
-from app.core.services import total_payment_for_the_loan
 
 
 @extend_schema(tags=["Emprestimos"])
@@ -90,9 +89,7 @@ class LoanPaymentSumView(APIView):
 
         loan = get_object_or_404(Loan, uuid=id, user=self.request.user)
 
-        total = total_payment_for_the_loan(loan)
-
-        serialize = PaymentSumSerializer(data={"total": total})
+        serialize = PaymentSumSerializer(data={"total": loan.total_payments})
         serialize.is_valid(raise_exception=True)
 
         return Response(serialize.data)

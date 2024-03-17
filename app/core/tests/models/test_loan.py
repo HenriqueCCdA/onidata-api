@@ -91,7 +91,14 @@ def test_value_with_interest_call_once(mocker, db):
 
 @pytest.mark.integration()
 def test_amount_due(loan_with_payments):
+    assert loan_with_payments.amount_due == Decimal("12500.00")
 
-    due = loan_with_payments.amount_due
 
-    assert due == Decimal("12500.00")
+@pytest.mark.integration()
+def test_positive_loan_payments_sum(loan_with_payments):
+    assert loan_with_payments.total_payments == Decimal(1500.00)
+
+
+@pytest.mark.integration()
+def test_negative_loan_payments_sum_without_any_payments(loan):
+    assert loan.total_payments == Decimal(0.00)
