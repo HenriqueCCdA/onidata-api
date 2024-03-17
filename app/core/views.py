@@ -1,4 +1,7 @@
+from dataclasses import asdict
+
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
@@ -8,8 +11,13 @@ from rest_framework.views import APIView
 
 from app.core.models import Loan, Payment
 from app.core.permission import UserOnlyCanAccessOwnLoan, UserOnlyCanAccessOwnPayment
-from app.core.serializers import LoanSerializer, PaymentSerializer, PaymentSumSerializer
+from app.core.serializers import DebtLoanSerializer, LoanSerializer, PaymentSerializer, PaymentSumSerializer
 from app.core.services import extract_client_id, total_payment_for_the_loan
+from app.core.services import loan_with_interest as loan_with_interest_
+
+
+def now():
+    return timezone.now()
 
 
 @extend_schema(tags=["debug"])
@@ -87,6 +95,28 @@ class LoanPaymentSum(APIView):
         return Response(serialize.data)
 
 
+class LoanWithInterest(APIView):
+    serializer_class = DebtLoanSerializer
+
+    def get(self, request, id):
+        """Calcula o montante final e o juros de um emprestimos."""
+
+        loan = get_object_or_404(Loan, uuid=id, user=self.request.user)
+
+        compound_interest = False
+        if self.request.query_params.get("interest") == "compound":
+            compound_interest = True
+
+        result = loan_with_interest_(
+            loan.nominal_value, loan.interest_rate, loan.created_at, now(), compound_interest=compound_interest
+        )
+
+        serialize = DebtLoanSerializer(data=asdict(result))
+        serialize.is_valid(raise_exception=True)
+
+        return Response(serialize.data)
+
+
 class PaymentLC(ListCreateAPIView):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -127,6 +157,7 @@ loans_lc = LoansLC.as_view()
 loan_retrieve = LoanRetrieve.as_view()
 loan_payment_list = LoanPaymentList.as_view()
 loan_payment_sum = LoanPaymentSum.as_view()
+loan_with_interest = LoanWithInterest.as_view()
 
 payment_lc = PaymentLC.as_view()
 payment_retrieve = PaymentRetrieve.as_view()
