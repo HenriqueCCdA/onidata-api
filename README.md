@@ -2,9 +2,46 @@
 
 [![Backend](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml/badge.svg)](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml)
 
-As libs utilizadas foram: `django`, `restframework`, `gunicorn`, `python-decouple`, `drf-spectacular` e `django-extensions`. Ferramentas de desenvolvimento utilizadas foram `ruff`, `black`, `pytest` e `taskipy`.
+ A documentação da `api` fica disponível em `/docs/`. As libs utilizadas
 
-A documentação da `api` fica disponível em `/docs/`.
+| libs              | descrição                                          |
+| ----------------- | -------------------------------------------------- |
+| django            | Framework web                                      |
+| restframework     | Extenão para contrução de APIs para o django       |
+| psycopg           | Driver para postgres                               |
+| drf-spectacular   | Documenação em OpenAPI                             |
+| gunicorn          | Servidor de aplicação                              |
+| python-decouple   | Variáveis de ambiente                              |
+| dj-database-url   | URL de banco de dados Django                       |
+| django-extensions | Funcionalidades extra para manege.py               |
+| pytest            | Framework de teste                                 |
+| coverage          | Cobertura de teste                                 |
+| ruff              | Formatador / Linter                                |
+| black             | Formatador                                         |
+| taskipy           | Tarefas                                            |
+| faker             | Geradores de dados Fake para testes                |
+| model-bakery      | Gerador de dados do Modelos do Djanfo para testes  |
+
+## Simulando o ambiente de produção
+
+Para simular o ambiente de produção simplificado foi usado o `nginx` como `proxy reverso` escutando na porta `80`. Os serviços do `app` e do banco de dados estão isolados dentro da rede do `docker`. A imagem da `app` é definida no `Dockerfile.prod` e a orquestração dos `containers` no `docker-compose-prod.yml`. Os arquivos
+estáticos do `admin` foram servidos pelo `nginx`. A coleta dos arquivos estáticos é feita no `docker-compose-prod.yml`.
+
+Para subir os containers basta:
+
+```bash
+docker compose -f docker-compose-prod.yml up -d
+```
+
+A documentação estará disponivel [http://localhost/docs/](http://localhost/docs/).
+
+## Pré-commit
+
+Para habilitar o pre commit basta:
+
+```bash
+pre-commit install
+```
 
 ## Subindo o banco de dados
 
@@ -35,6 +72,9 @@ Subindo o servidor:
 ```bash
 python manage.py runserver
 ```
+
+A documentação estará disponivel [http://localhost:8000/docs/](http://localhost:8000/docs/).
+
 
 Rodando os testes:
 
@@ -76,6 +116,8 @@ Para subir os `conteiners` da aplicação e banco de dados:
 docker compose -f docker-compose-dev.yml up -d
 ```
 
+A documentação estará disponivel [http://localhost:8000/docs/](http://localhost:8000/docs/).
+
 Para rodar os testes.
 
 ```bash
@@ -104,12 +146,4 @@ Para usar o `ruff` como linter:
 
 ```bash
 docker compose -f docker-compose-dev.yml run api task lint
-```
-
-## Pré-commit
-
-Para habilitar o pre commit basta:
-
-```bash
-pre-commit install
 ```
