@@ -13,8 +13,9 @@ def test_positive_serialization_objs_list(two_loans):
 
     for data, db in zip(serializer.data, two_loans):
         assert data["uuid"] == str(db.uuid)
-        assert data["nominal_value"] == str(db.nominal_value)
-        assert data["interest_rate"] == str(db.interest_rate)
+        assert data["value"] == str(db.value)
+        assert data["rate"] == str(db.rate)
+        assert data["contracted_period"] == db.contracted_period
         assert data["payments"] == [p["id"] for p in db.payments.values("id")]
         assert data["register_ip"] == db.register_ip
         assert data["bank"] == db.bank
@@ -31,8 +32,9 @@ def test_positive_serialization_one_obj(loan):
     data = serializer.data
 
     assert data["uuid"] == str(loan.uuid)
-    assert data["nominal_value"] == str(loan.nominal_value)
-    assert data["interest_rate"] == str(loan.interest_rate)
+    assert data["value"] == str(loan.value)
+    assert data["rate"] == str(loan.rate)
+    assert data["contracted_period"] == loan.contracted_period
     assert data["payments"] == [p["id"] for p in loan.payments.values("id")]
     assert data["register_ip"] == loan.register_ip
     assert data["bank"] == loan.bank
@@ -44,9 +46,10 @@ def test_positive_serialization_one_obj(loan):
 @pytest.mark.parametrize(
     "field",
     [
-        "nominal_value",
-        "interest_rate",
+        "value",
+        "rate",
         "bank",
+        "contracted_period",
     ],
 )
 def test_negative_missing_fields(field, create_loan_payload):
@@ -66,22 +69,22 @@ def test_negative_missing_fields(field, create_loan_payload):
     ("field", "value", "error"),
     [
         (
-            "nominal_value",
+            "value",
             "-1.0",
             "Certifque-se de que este valor seja maior ou igual a 0.0.",
         ),
         (
-            "nominal_value",
+            "value",
             "NaN",
             "Um número válido é necessário.",
         ),
         (
-            "interest_rate",
+            "rate",
             "-1.0",
             "Certifque-se de que este valor seja maior ou igual a 0.0.",
         ),
         (
-            "interest_rate",
+            "rate",
             "NaN",
             "Um número válido é necessário.",
         ),
@@ -90,13 +93,25 @@ def test_negative_missing_fields(field, create_loan_payload):
             101 * "F",
             "Certifique-se de que este campo não tenha mais de 100 caracteres.",
         ),
+        (
+            "contracted_period",
+            "-1",
+            "Certifque-se de que este valor seja maior ou igual a 0.",
+        ),
+        (
+            "contracted_period",
+            "NaN",
+            "Um número inteiro válido é exigido.",
+        ),
     ],
     ids=[
-        "nominal_value_lt_zero",
-        "nominal_value_NaN",
-        "interest_rate_lt_zero",
-        "interest_rate_NaN",
+        "value_lt_zero",
+        "value_NaN",
+        "rate_lt_zero",
+        "rate_NaN",
         "bank_lenght_gt_100",
+        "contracted_period_lt_zero",
+        "contracted_period_NaN",
     ],
 )
 def test_negative_validation_errors(field, value, error, create_loan_payload):

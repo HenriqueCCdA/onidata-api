@@ -19,8 +19,9 @@ def test_positive(client_api_auth, create_loan_payload):
     loan_from_db = Loan.objects.first()
 
     assert body["uuid"] == str(loan_from_db.uuid)
-    assert body["nominal_value"] == str(loan_from_db.nominal_value)
-    assert body["interest_rate"] == str(loan_from_db.interest_rate)
+    assert body["value"] == str(loan_from_db.value)
+    assert body["rate"] == str(loan_from_db.rate)
+    assert body["contracted_period"] == loan_from_db.contracted_period
     assert body["register_ip"] == loan_from_db.register_ip
     assert body["bank"] == loan_from_db.bank
     assert body["created_at"] == loan_from_db.created_at.astimezone().isoformat()
@@ -32,22 +33,22 @@ def test_positive(client_api_auth, create_loan_payload):
     ("field", "value", "error"),
     [
         (
-            "nominal_value",
+            "value",
             "-1.0",
             "Certifque-se de que este valor seja maior ou igual a 0.0.",
         ),
         (
-            "nominal_value",
+            "value",
             "NaN",
             "Um número válido é necessário.",
         ),
         (
-            "interest_rate",
+            "rate",
             "-1.0",
             "Certifque-se de que este valor seja maior ou igual a 0.0.",
         ),
         (
-            "interest_rate",
+            "rate",
             "NaN",
             "Um número válido é necessário.",
         ),
@@ -56,6 +57,16 @@ def test_positive(client_api_auth, create_loan_payload):
             101 * "F",
             "Certifique-se de que este campo não tenha mais de 100 caracteres.",
         ),
+        (
+            "contracted_period",
+            "-1",
+            "Certifque-se de que este valor seja maior ou igual a 0.",
+        ),
+        (
+            "contracted_period",
+            "NaN",
+            "Um número inteiro válido é exigido.",
+        ),
     ],
     ids=[
         "nominal_value_lt_zero",
@@ -63,6 +74,8 @@ def test_positive(client_api_auth, create_loan_payload):
         "interest_rate_lt_zero",
         "interest_rate_NaN",
         "bank_lenght_gt_100",
+        "contracted_period_lt_zero",
+        "contracted_period_NaN",
     ],
 )
 def test_negative_invalid_value(client_api_auth, create_loan_payload, field, value, error):
@@ -82,9 +95,10 @@ def test_negative_invalid_value(client_api_auth, create_loan_payload, field, val
 @pytest.mark.parametrize(
     "field",
     [
-        "nominal_value",
-        "interest_rate",
+        "value",
+        "rate",
         "bank",
+        "contracted_period",
     ],
 )
 def test_negative_missing_fields(client_api_auth, create_loan_payload, field):

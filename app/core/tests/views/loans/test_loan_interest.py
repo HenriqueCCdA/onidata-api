@@ -1,21 +1,16 @@
-from datetime import timedelta
 from uuid import uuid4
 
 import pytest
 from django.shortcuts import resolve_url
-from django.utils import timezone
 from rest_framework import status
 
 END_POINT_NAME = "core:loan-with-interest"
 
 
 @pytest.mark.integration()
-def test_positive(mocker, client_api_auth, loan_10000_with_10_interest_rate):
+def test_positive(client_api_auth, loan_10000_with_10_interest_rate):
 
     url = resolve_url(END_POINT_NAME, loan_10000_with_10_interest_rate.uuid)
-
-    time = timezone.now() + timedelta(days=60)
-    mocker.patch("app.core.views.loan.now", return_value=time)
 
     response = client_api_auth.get(url)
 
@@ -23,17 +18,14 @@ def test_positive(mocker, client_api_auth, loan_10000_with_10_interest_rate):
 
     body = response.json()
 
-    assert body["total"] == "12000.00"
-    assert body["interest"] == "2000.00"
+    assert body["total"] == "14000.00"
+    assert body["interest"] == "4000.00"
 
 
 @pytest.mark.integration()
-def test_positive_simple_interest(mocker, client_api_auth, loan_10000_with_10_interest_rate):
+def test_positive_simple_interest(client_api_auth, loan_10000_with_10_interest_rate):
 
     url = resolve_url(END_POINT_NAME, loan_10000_with_10_interest_rate.uuid)
-
-    time = timezone.now() + timedelta(days=60)
-    mocker.patch("app.core.views.loan.now", return_value=time)
 
     response = client_api_auth.get(f"{url}?interest=simple")
 
@@ -41,17 +33,14 @@ def test_positive_simple_interest(mocker, client_api_auth, loan_10000_with_10_in
 
     body = response.json()
 
-    assert body["total"] == "12000.00"
-    assert body["interest"] == "2000.00"
+    assert body["total"] == "14000.00"
+    assert body["interest"] == "4000.00"
 
 
 @pytest.mark.integration()
-def test_positive_compound_interest(mocker, client_api_auth, loan_10000_with_10_interest_rate):
+def test_positive_compound_interest(client_api_auth, loan_10000_with_10_interest_rate):
 
     url = resolve_url(END_POINT_NAME, loan_10000_with_10_interest_rate.uuid)
-
-    time = timezone.now() + timedelta(days=60)
-    mocker.patch("app.core.views.loan.now", return_value=time)
 
     response = client_api_auth.get(f"{url}?interest=compound")
 
@@ -59,8 +48,8 @@ def test_positive_compound_interest(mocker, client_api_auth, loan_10000_with_10_
 
     body = response.json()
 
-    assert body["total"] == "12100.00"
-    assert body["interest"] == "2100.00"
+    assert body["total"] == "14641.00"
+    assert body["interest"] == "4641.00"
 
 
 @pytest.mark.integration()

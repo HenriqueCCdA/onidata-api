@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 from decimal import Decimal
 
 import pytest
@@ -55,32 +54,30 @@ def test_negative_loan_payments_sum_without_any_payments(loan):
 
 @pytest.mark.unity()
 @pytest.mark.parametrize(
-    ("days", "total", "interest", "compound_interest"),
+    ("months", "total", "interest", "compound_interest"),
     [
-        (30, Decimal("11000.00"), Decimal("1000.00"), False),
-        (45, Decimal("11500.00"), Decimal("1500.00"), False),
-        (60, Decimal("12000.00"), Decimal("2000.00"), False),
-        (30, Decimal("11000.00"), Decimal("1000.00"), True),
-        (45, Decimal("11536.90"), Decimal("1536.90"), True),
-        (60, Decimal("12100.00"), Decimal("2100.00"), True),
+        (6, Decimal("16000.00"), Decimal("6000.00"), False),
+        (12, Decimal("22000.00"), Decimal("12000.00"), False),
+        (24, Decimal("34000.00"), Decimal("24000.00"), False),
+        (6, Decimal("17715.61"), Decimal("7715.61"), True),
+        (12, Decimal("31384.28"), Decimal("21384.28"), True),
+        (24, Decimal("98497.33"), Decimal("88497.33"), True),
     ],
     ids=[
-        "days=30, simple",
-        "days=45, simple",
-        "days=60, simple",
-        "days=30, compound",
-        "days=45, compound",
-        "days=60, compound",
+        "months=6, simple",
+        "months=12, simple",
+        "months=24, compound",
+        "months=6, compound",
+        "months=12, compound",
+        "months=24, compound",
     ],
 )
-def test_positive_loan_with_interest(days, total, interest, compound_interest, loan_10000_with_10_interest_rate):
+def test_positive_loan_with_interest(months, total, interest, compound_interest, loan_10000_with_10_interest_rate):
 
-    principal = loan_10000_with_10_interest_rate.nominal_value
-    interest_rate = loan_10000_with_10_interest_rate.interest_rate
-    initial_date = datetime(2024, 1, 1)
-    current_date = timedelta(days=days) + initial_date
+    principal = loan_10000_with_10_interest_rate.value
+    rate = loan_10000_with_10_interest_rate.rate
 
-    result = loan_with_interest(principal, interest_rate, initial_date, current_date, compound_interest)
+    result = loan_with_interest(principal, rate, months, compound_interest)
 
     assert result.total == total
     assert result.interest == interest

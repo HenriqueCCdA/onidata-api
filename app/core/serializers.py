@@ -22,8 +22,9 @@ class LoanSerializer(serializers.ModelSerializer):
         model = Loan
         fields = (
             "uuid",
-            "nominal_value",
-            "interest_rate",
+            "value",
+            "rate",
+            "contracted_period",
             "register_ip",
             "payments",
             "bank",
