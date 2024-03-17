@@ -22,6 +22,12 @@
 | faker             | Geradores de dados Fake para testes                |
 | model-bakery      | Gerador de dados do Modelos do Djanfo para testes  |
 
+Deploy da aplicação no fly.io
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+⚠️⚠️⚠️⚠️ [nidata-api.fly.dev](https://onidata-api.fly.dev/docs/) ⚠️⚠️⚠️⚠️
+⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
+
 ## Simulando o ambiente de produção
 
 Para simular o ambiente de produção simplificado foi usado o `nginx` como `proxy reverso` escutando na porta `80`. Os serviços do `app` e do banco de dados estão isolados dentro da rede do `docker`. A imagem da `app` é definida no `Dockerfile.prod` e a orquestração dos `containers` no `docker-compose-prod.yml`. Os arquivos
