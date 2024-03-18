@@ -22,6 +22,7 @@ def test_positive(client_api_auth, payments_of_two_users):
         assert b["uuid"] == str(e.uuid)
         assert b["value"] == str(e.value)
         assert b["loan"] == str(e.loan.uuid)
+        assert b["payment_date"] == e.payment_date.isoformat()
         assert b["created_at"] == e.created_at.astimezone().isoformat()
         assert b["modified_at"] == e.modified_at.astimezone().isoformat()
 

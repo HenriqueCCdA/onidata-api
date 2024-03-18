@@ -4,6 +4,7 @@ import pytest
 from django.shortcuts import resolve_url
 from rest_framework import status
 
+from app.conftest import fake
 from app.core.models import Payment
 
 URL = resolve_url("core:payments-list-create")
@@ -23,6 +24,7 @@ def test_positive(client_api_auth, create_payment_payload):
     assert body["uuid"] == str(payment_from_db.uuid)
     assert body["value"] == str(payment_from_db.value)
     assert body["loan"] == str(payment_from_db.loan.uuid)
+    assert body["payment_date"] == payment_from_db.payment_date.isoformat()
     assert body["created_at"] == payment_from_db.created_at.astimezone().isoformat()
     assert body["modified_at"] == payment_from_db.modified_at.astimezone().isoformat()
 
@@ -33,6 +35,7 @@ def test_negative_payment_cannot_exceed_the_total_debt(client_api_auth, loan_wit
     data = {
         "value": loan_with_payments.amount_due + Decimal("0.01"),
         "loan": str(loan_with_payments.uuid),
+        "payment_date": fake.date(),
     }
 
     response = client_api_auth.post(URL, data=data, format="json")
@@ -86,12 +89,18 @@ def test_negative_user_not_must_pay_other_user_loan(client_api_auth, create_paym
             "10ad5e50-0068-4898-a84e-2b0ffb3333ae",
             'Pk inválido "10ad5e50-0068-4898-a84e-2b0ffb3333ae" - objeto não existe.',
         ),
+        (
+            "payment_date",
+            "not_a_valid_date",
+            "Formato inválido para data. Use um dos formatos a seguir: YYYY-MM-DD.",
+        ),
     ],
     ids=[
         "value_lt_zero",
         "value_NaN",
         "loan_invalid_id",
         "loan_id_not_exists",
+        "payment_date_not_a_valid_date",
     ],
 )
 def test_negative_invalid_value(client_api_auth, create_payment_payload, field, value, error):

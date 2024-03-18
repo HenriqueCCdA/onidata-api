@@ -16,6 +16,7 @@ def test_model_fiels():
     assert Loan._meta.get_field("register_ip")
     assert Loan._meta.get_field("bank")
     assert Loan._meta.get_field("user")
+    assert Loan._meta.get_field("request_date")
     assert Loan._meta.get_field("created_at")
     assert Loan._meta.get_field("modified_at")
 

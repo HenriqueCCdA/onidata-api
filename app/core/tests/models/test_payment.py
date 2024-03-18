@@ -11,6 +11,7 @@ def test_model_fiels():
     assert Payment._meta.get_field("uuid")
     assert Payment._meta.get_field("loan")
     assert Payment._meta.get_field("value")
+    assert Payment._meta.get_field("payment_date")
     assert Payment._meta.get_field("created_at")
     assert Payment._meta.get_field("modified_at")
 

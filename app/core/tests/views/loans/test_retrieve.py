@@ -25,6 +25,7 @@ def test_positive(client_api_auth, loan):
     assert body["register_ip"] == loan.register_ip
     assert body["payments"] == [p["id"] for p in loan.payments.values("id")]
     assert body["bank"] == loan.bank
+    assert body["request_date"] == loan.request_date.isoformat()
     assert body["created_at"] == loan.created_at.astimezone().isoformat()
     assert body["modified_at"] == loan.modified_at.astimezone().isoformat()
 

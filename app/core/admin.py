@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
 
 from .models import Loan, Payment
 
@@ -9,11 +8,11 @@ class LoanAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            None,
+            "Primary key",
             {"fields": ("id",)},
         ),
         (
-            _("User data"),
+            "User data",
             {
                 "fields": (
                     "user",
@@ -22,19 +21,11 @@ class LoanAdmin(admin.ModelAdmin):
             },
         ),
         (
-            _("Loan infos"),
-            {
-                "fields": (
-                    "uuid",
-                    "value",
-                    "rate",
-                    "contracted_period",
-                    "bank",
-                )
-            },
+            "Loan infos",
+            {"fields": ("uuid", "value", "rate", "contracted_period", "bank", "request_date")},
         ),
         (
-            _("Important dates"),
+            "Created and modified",
             {
                 "fields": (
                     "created_at",
@@ -53,6 +44,7 @@ class LoanAdmin(admin.ModelAdmin):
         "contracted_period",
         "register_ip",
         "bank",
+        "request_date",
         "created_at",
         "modified_at",
     )
@@ -60,6 +52,7 @@ class LoanAdmin(admin.ModelAdmin):
     readonly_fields = (
         "id",
         "uuid",
+        "request_date",
         "created_at",
         "modified_at",
     )
@@ -75,21 +68,22 @@ class PaymentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            None,
+            "Primary key",
             {"fields": ("id",)},
         ),
         (
-            _("Payment infos"),
+            "Payment infos",
             {
                 "fields": (
                     "uuid",
                     "loan",
                     "value",
+                    "payment_date",
                 )
             },
         ),
         (
-            _("Important dates"),
+            "Created and modified",
             {
                 "fields": (
                     "created_at",
@@ -104,6 +98,7 @@ class PaymentAdmin(admin.ModelAdmin):
         "uuid",
         "loan",
         "value",
+        "payment_date",
         "created_at",
         "modified_at",
     )
