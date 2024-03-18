@@ -20,15 +20,29 @@
 | coverage          | Cobertura de teste                                 |
 | ruff              | Formatador / Linter                                |
 | black             | Formatador                                         |
-| taskipy           | Tarefas                                            |
+| taskipy           | Gerenciador de tarefas e comandos                  |
 | faker             | Geradores de dados Fake para testes                |
 | model-bakery      | Gerador de dados do Modelos do Djanfo para testes  |
+| sentry            | Monitoramento de errors em produção                |
+
 
 ## Deploy
 
 Deploy da aplicação no fly.io: ⚠️⚠️⚠️⚠️ [onidata-api.fly.dev](https://onidata-api.fly.dev/) ⚠️⚠️⚠️⚠️
 
 Os arquivos `Dockerfile` e `fly.toml`foram são do deploy do `fly.io`.
+
+
+## Variaveis de ambiente
+
+Uma amostra das variáveis de ambiente disponiveis estão no arquivo `.env_samples`. Elas são:
+
+- `SECRET_KEY` - Chave secreta do Django
+- `ALLOWED_HOSTS` - Hosts do Django
+- `DATABASE_URL` - Url do banco de dados
+- `DEBUG` - Debug do django
+- `DOC_API` - Habilita ou não a documenta OpenAPI
+- `SENTRY_DNS` - Configuração do sentry
 
 
 ## Simulando o ambiente de produção

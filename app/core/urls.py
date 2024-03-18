@@ -2,8 +2,16 @@ from django.urls import path
 
 from . import views
 
+
+def trigger_error(request):
+    _ = 1 / 0
+
+
 app_name = "core"
 urlpatterns = [
+    #
+    path("sentry-debug/", trigger_error),
+    #
     path("", views.root, name="root"),
     path("get_client_ip/", views.get_client_ip, name="get-client-ip"),
     #
