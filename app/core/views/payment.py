@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 
@@ -7,7 +7,24 @@ from app.core.permission import UserOnlyCanAccessOwnPayment
 from app.core.serializers import PaymentSerializer
 
 
-@extend_schema(tags=["Pagamentos"])
+@extend_schema_view(
+    get=extend_schema(
+        tags=["Pagamentos"],
+        summary="Lista de pagamentos",
+        description=(
+            "Retorna os pagamentos de usuário. O usuario é obtido pelo `Token`. "
+            "O pagamento é definido pelo seu `uuid`."
+        ),
+    ),
+    post=extend_schema(
+        tags=["Pagamentos"],
+        summary="Cria o pagamento para um emprestimo",
+        description=(
+            "Cria o pagamento para emprestimo para um usuário. O usuario é obtido pelo `Token`. "
+            "O pagamento é definido pelo seu `uuid`."
+        ),
+    ),
+)
 class PaymentLC(ListCreateAPIView):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -16,35 +33,23 @@ class PaymentLC(ListCreateAPIView):
         queryset = super().get_queryset()
         return queryset.filter(loan__user=self.request.user)
 
-    @extend_schema(summary="Lista de pagamentos")
-    def get(self, request, *args, **kwargs):
-        """Retorna os pagamentos usuario. O usuario é
-        obtido pelo `Token`. O pagamento é definido pelo seu `uuid`.
-        """
-        return super().get(request, *args, **kwargs)
 
-    @extend_schema(summary="Cria o pagamento para um emprestimo")
-    def post(self, request, *args, **kwargs):
-        """Cria o pagamento para emprestimo. O usuario é
-        obtido pelo `Token`. O pagamento é definido pelo seu `uuid`.
-        """
-        return super().post(request, *args, **kwargs)
-
-
-@extend_schema(tags=["Pagamentos"])
+@extend_schema_view(
+    get=extend_schema(
+        tags=["Pagamentos"],
+        summary="Recupera um pagamento",
+        description=(
+            "Recupera um pagamento de um usuário. O usuario é obtido pelo `Token`. "
+            "O pagamento é definido pelo seu `uuid`."
+        ),
+    ),
+)
 class PaymentRetrieve(RetrieveAPIView):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     permission_classes = (UserOnlyCanAccessOwnPayment, IsAuthenticated)
     lookup_field = "uuid"
     lookup_url_kwarg = "id"
-
-    @extend_schema(summary="Recupera um pagamento")
-    def get(self, request, *args, **kwargs):
-        """Recupera um pagamento do usuario. O usuario é
-        obtido pelo `Token`. O pagamento é definido pelo seu `uuid`.
-        """
-        return super().get(request, *args, **kwargs)
 
 
 payment_lc = PaymentLC.as_view()

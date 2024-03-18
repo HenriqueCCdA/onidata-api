@@ -1,7 +1,7 @@
 from dataclasses import asdict
 
 from django.shortcuts import get_object_or_404
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.generics import ListCreateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -20,6 +20,24 @@ from app.core.services import loan_with_interest as loan_with_interest_
 
 
 @extend_schema(tags=["Emprestimos"])
+@extend_schema_view(
+    get=extend_schema(
+        tags=["Emprestimos"],
+        summary="Lista os emprestimo",
+        description=(
+            "Retorna os emprestimos do usuario logado. O usuario é obtido pelo `Token`. "
+            "O emprestimo é definido pelo seu `uuid`.."
+        ),
+    ),
+    post=extend_schema(
+        tags=["Emprestimos"],
+        summary="Lista os emprestimo",
+        description=(
+            "Cria o emprestimo do usuario autorizado. O usuario é obtido pelo `Token`. "
+            "O emprestimo é definido pelo seu `uuid`.."
+        ),
+    ),
+)
 class LoansLCView(ListCreateAPIView):
     serializer_class = LoanSerializer
     queryset = Loan.objects.all()
@@ -28,35 +46,23 @@ class LoansLCView(ListCreateAPIView):
         queryset = super().get_queryset()
         return queryset.filter(user=self.request.user)
 
-    @extend_schema(summary="Lista os emprestimo")
-    def get(self, request, *args, **kwargs):
-        """Retorna os emprestimos do usuario logado. O usuario é
-        obtido pelo `Token`. O emprestimo pe definido pelo seu `uuid`.
-        """
-        return super().get(request, *args, **kwargs)
 
-    @extend_schema(summary="Cria o emprestimo")
-    def post(self, request, *args, **kwargs):
-        """Cria o emprestimo do usuario auth. O usuario é
-        obtido pelo `Token`. O emprestimo pe definido pelo seu `uuid`.
-        """
-        return super().post(request, *args, **kwargs)
-
-
-@extend_schema(tags=["Emprestimos"])
+@extend_schema_view(
+    get=extend_schema(
+        tags=["Emprestimos"],
+        summary="Recupera um emprestimo",
+        description=(
+            "Recupera um emprestimo do usuario. O usuario é obtido pelo Token. "
+            "O emprestimo é definido pelo seu `uuid`."
+        ),
+    ),
+)
 class LoanRetrieveView(RetrieveAPIView):
     serializer_class = LoanSerializer
     queryset = Loan.objects.all()
     permission_classes = (UserOnlyCanAccessOwnLoan, IsAuthenticated)
     lookup_field = "uuid"
     lookup_url_kwarg = "id"
-
-    @extend_schema(summary="Recupera um emprestimo")
-    def get(self, request, *args, **kwargs):
-        """Recupera um emprestimo do usuario. O usuario é
-        obtido pelo Token. O emprestimo pe definido pelo seu `uuid`.
-        """
-        return super().get(request, *args, **kwargs)
 
 
 @extend_schema(tags=["Juros, pagementos e valores devidos"])
@@ -76,11 +82,10 @@ class LoanPaymentListView(APIView):
         return Response(serialize.data)
 
 
-@extend_schema(tags=["Juros, pagementos e valores devidos"])
 class LoanPaymentSumView(APIView):
     serializer_class = PaymentSumSerializer
 
-    @extend_schema(summary="Soma os pamentos de um emprestimo")
+    @extend_schema(tags=["Juros, pagementos e valores devidos"], summary="Soma os pamentos de um emprestimo")
     def get(self, request, id):
         """
         Soma os pagamentos feitos para um emprestimo específico.
@@ -95,11 +100,10 @@ class LoanPaymentSumView(APIView):
         return Response(serialize.data)
 
 
-@extend_schema(tags=["Juros, pagementos e valores devidos"])
 class LoanWithInterestView(APIView):
     serializer_class = DebtLoanSerializer
 
-    @extend_schema(summary="Calcula montente fianl e juros")
+    @extend_schema(tags=["Juros, pagementos e valores devidos"], summary="Calcula montente fianl e juros")
     def get(self, request, id):
         """
         Calcula o montante final e o juros de um emprestimos especifico.
@@ -121,11 +125,10 @@ class LoanWithInterestView(APIView):
         return Response(serialize.data)
 
 
-@extend_schema(tags=["Juros, pagementos e valores devidos"])
 class AmountDueView(APIView):
     serializer_class = AmountDueSerializer
 
-    @extend_schema(summary="Valor devido")
+    @extend_schema(tags=["Juros, pagementos e valores devidos"], summary="Valor devido")
     def get(self, request, id):
         """Total do valor devido com os pagamentos já descontados. O emprestimo é definido pelo seu `uuid`.
         O calculo e feito com juros simples.
