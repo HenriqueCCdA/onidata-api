@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import pytest
 from django.shortcuts import resolve_url
 from rest_framework import status
@@ -23,6 +25,23 @@ def test_positive(client_api_auth, create_payment_payload):
     assert body["loan"] == str(payment_from_db.loan.uuid)
     assert body["created_at"] == payment_from_db.created_at.astimezone().isoformat()
     assert body["modified_at"] == payment_from_db.modified_at.astimezone().isoformat()
+
+
+@pytest.mark.integration()
+def test_negative_payment_cannot_exceed_the_total_debt(client_api_auth, loan_with_payments):
+
+    data = {
+        "value": loan_with_payments.amount_due + Decimal("0.01"),
+        "loan": str(loan_with_payments.uuid),
+    }
+
+    response = client_api_auth.post(URL, data=data, format="json")
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    body = response.json()
+
+    assert body["value"] == ['O pagamento "12500.01" é maior que divida "12500.00" atual.']
 
 
 @pytest.mark.integration()
