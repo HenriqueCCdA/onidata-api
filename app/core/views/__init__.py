@@ -1,4 +1,4 @@
-from .base import get_client_ip
+from .base import get_client_ip, root
 from .loan import (
     loan_amount_due,
     loan_lc,
@@ -10,6 +10,7 @@ from .loan import (
 from .payment import payment_lc, payment_retrieve
 
 __all__ = (
+    root,
     get_client_ip,
     loan_lc,
     loan_amount_due,
