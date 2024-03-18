@@ -144,8 +144,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "TITLE",
-    "DESCRIPTION": "DESCRIPTION",
+    "TITLE": "Onidata-api",
+    "DESCRIPTION": "`API` de emprestimo e pagementos",
     "VERSION": __version__,
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": False,

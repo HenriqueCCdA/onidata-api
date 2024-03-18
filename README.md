@@ -1,5 +1,7 @@
 # onidata-api
 
+![](https://img.shields.io/github/last-commit/HenriqueCCdA/onidata-api?style=plasti&ccolor=blue)
+![](https://img.shields.io/badge/Autor-Henrique%20C%20C%20de%20Andrade-blue)
 [![Backend](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml/badge.svg)](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml)
 
  A documentação da `api` fica disponível em `/docs/`. As libs utilizadas
@@ -26,10 +28,12 @@
 
 Deploy da aplicação no fly.io: ⚠️⚠️⚠️⚠️ [onidata-api.fly.dev](https://onidata-api.fly.dev/) ⚠️⚠️⚠️⚠️
 
+Os arquivos `Dockerfile` e `fly.toml`foram são do deploy do `fly.io`.
+
 
 ## Simulando o ambiente de produção
 
-Para simular o ambiente de produção simplificado foi usado o `nginx` como `proxy reverso` escutando na porta `80`. Os serviços do `app` e do banco de dados estão isolados dentro da rede do `docker`. A imagem da `app` é definida no `Dockerfile.prod` e a orquestração dos `containers` no `docker-compose-prod.yml`. Os arquivos
+Para simular o ambiente de produção simplificada foi usado o `nginx` como `proxy reverso` escutando na porta `80`. Os serviços do `app` e do banco de dados estão isolados dentro da rede do `docker`. A imagem da `app` é definida no `Dockerfile.prod` e a orquestração dos `containers` no `docker-compose-prod.yml`. Os arquivos
 estáticos do `admin` foram servidos pelo `nginx`. A coleta dos arquivos estáticos é feita no `docker-compose-prod.yml`.
 
 Para subir os containers basta:
@@ -38,15 +42,8 @@ Para subir os containers basta:
 docker compose -f docker-compose-prod.yml up -d
 ```
 
-A documentação estará disponivel [http://localhost/docs/](http://localhost/docs/).
+A documentação estará disponivel em [http://localhost/docs/](http://localhost/docs/).
 
-## Pré-commit
-
-Para habilitar o pre commit basta:
-
-```bash
-pre-commit install
-```
 
 ## Subindo o banco de dados
 
@@ -66,6 +63,8 @@ docker compose -f docker-compose-dev.yml up database -d
 
 ## Desenvolvimento local
 
+Todo o desenvolimento pode ser feito na maquina local sem docker caso você prefirir. Com a exceção do banco de dados.
+
 Para instalar as dependencias:
 
 ```bash
@@ -79,7 +78,6 @@ python manage.py runserver
 ```
 
 A documentação estará disponivel [http://localhost:8000/docs/](http://localhost:8000/docs/).
-
 
 Rodando os testes:
 
