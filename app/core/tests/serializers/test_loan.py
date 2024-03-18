@@ -19,6 +19,7 @@ def test_positive_serialization_objs_list(two_loans):
         assert data["payments"] == [p["id"] for p in db.payments.values("id")]
         assert data["register_ip"] == db.register_ip
         assert data["bank"] == db.bank
+        assert data["request_date"] == db.request_date.isoformat()
         assert data["created_at"] == db.created_at.astimezone().isoformat()
         assert data["modified_at"] == db.modified_at.astimezone().isoformat()
 
@@ -38,6 +39,7 @@ def test_positive_serialization_one_obj(loan):
     assert data["payments"] == [p["id"] for p in loan.payments.values("id")]
     assert data["register_ip"] == loan.register_ip
     assert data["bank"] == loan.bank
+    assert data["request_date"] == loan.request_date.isoformat()
     assert data["created_at"] == loan.created_at.astimezone().isoformat()
     assert data["modified_at"] == loan.modified_at.astimezone().isoformat()
 
@@ -50,6 +52,7 @@ def test_positive_serialization_one_obj(loan):
         "rate",
         "bank",
         "contracted_period",
+        "request_date",
     ],
 )
 def test_negative_missing_fields(field, create_loan_payload):
@@ -103,6 +106,11 @@ def test_negative_missing_fields(field, create_loan_payload):
             "NaN",
             "Um número inteiro válido é exigido.",
         ),
+        (
+            "request_date",
+            "not_a_valid_date",
+            "Formato inválido para data. Use um dos formatos a seguir: YYYY-MM-DD.",
+        ),
     ],
     ids=[
         "value_lt_zero",
@@ -112,6 +120,7 @@ def test_negative_missing_fields(field, create_loan_payload):
         "bank_lenght_gt_100",
         "contracted_period_lt_zero",
         "contracted_period_NaN",
+        "request_date_not_a_valid_date",
     ],
 )
 def test_negative_validation_errors(field, value, error, create_loan_payload):

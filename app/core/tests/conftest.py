@@ -3,6 +3,7 @@ from decimal import Decimal
 import pytest
 from model_bakery import baker
 
+from app.conftest import fake
 from app.core.models import Loan, Payment
 
 
@@ -63,6 +64,7 @@ def create_loan_payload():
         "rate": "40.00",
         "contracted_period": 12,
         "bank": "Banco do Brasil",
+        "request_date": fake.date(),
     }
 
 
@@ -71,6 +73,7 @@ def create_payment_payload(loan):
     return {
         "value": "1000.00",
         "loan": str(loan.uuid),
+        "payment_date": fake.date(),
     }
 
 
@@ -90,9 +93,9 @@ def loan_with_payments(loan_10000_with_10_interest_rate):
 
     Payment.objects.bulk_create(
         [
-            Payment(loan=loan_10000_with_10_interest_rate, value=200.49),
-            Payment(loan=loan_10000_with_10_interest_rate, value=299.51),
-            Payment(loan=loan_10000_with_10_interest_rate, value=1000.00),
+            Payment(loan=loan_10000_with_10_interest_rate, value=200.49, payment_date="2024-01-01"),
+            Payment(loan=loan_10000_with_10_interest_rate, value=299.51, payment_date="2024-01-01"),
+            Payment(loan=loan_10000_with_10_interest_rate, value=1000.00, payment_date="2024-01-01"),
         ]
     )
 

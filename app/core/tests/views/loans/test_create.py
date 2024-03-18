@@ -18,12 +18,14 @@ def test_positive(client_api_auth, create_loan_payload):
 
     loan_from_db = Loan.objects.first()
 
+    # TODO: Testar o retorn com payload
     assert body["uuid"] == str(loan_from_db.uuid)
     assert body["value"] == str(loan_from_db.value)
     assert body["rate"] == str(loan_from_db.rate)
     assert body["contracted_period"] == loan_from_db.contracted_period
     assert body["register_ip"] == loan_from_db.register_ip
     assert body["bank"] == loan_from_db.bank
+    assert body["request_date"] == loan_from_db.request_date.isoformat()
     assert body["created_at"] == loan_from_db.created_at.astimezone().isoformat()
     assert body["modified_at"] == loan_from_db.modified_at.astimezone().isoformat()
 
@@ -67,6 +69,11 @@ def test_positive(client_api_auth, create_loan_payload):
             "NaN",
             "Um número inteiro válido é exigido.",
         ),
+        (
+            "request_date",
+            "not_a_valid_date",
+            "Formato inválido para data. Use um dos formatos a seguir: YYYY-MM-DD.",
+        ),
     ],
     ids=[
         "nominal_value_lt_zero",
@@ -76,6 +83,7 @@ def test_positive(client_api_auth, create_loan_payload):
         "bank_lenght_gt_100",
         "contracted_period_lt_zero",
         "contracted_period_NaN",
+        "request_date_not_a_valid_date",
     ],
 )
 def test_negative_invalid_value(client_api_auth, create_loan_payload, field, value, error):
@@ -99,6 +107,7 @@ def test_negative_invalid_value(client_api_auth, create_loan_payload, field, val
         "rate",
         "bank",
         "contracted_period",
+        "request_date",
     ],
 )
 def test_negative_missing_fields(client_api_auth, create_loan_payload, field):

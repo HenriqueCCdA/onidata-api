@@ -3,6 +3,7 @@ from decimal import Decimal
 import pytest
 from django.test import RequestFactory
 
+from app.conftest import fake
 from app.core.models import Payment
 from app.core.serializers import PaymentSerializer
 
@@ -16,6 +17,7 @@ def test_positive_serialization_objs_list(two_payments):
         assert data["uuid"] == str(db.uuid)
         assert data["loan"] == str(db.loan.uuid)
         assert data["value"] == str(db.value)
+        assert data["payment_date"] == db.payment_date.isoformat()
         assert data["created_at"] == db.created_at.astimezone().isoformat()
         assert data["modified_at"] == db.modified_at.astimezone().isoformat()
 
@@ -31,6 +33,7 @@ def test_positive_serialization_one_obj(payment):
     assert data["uuid"] == str(payment.uuid)
     assert data["loan"] == str(payment.loan.uuid)
     assert data["value"] == str(payment.value)
+    assert data["payment_date"] == payment.payment_date.isoformat()
     assert data["created_at"] == payment.created_at.astimezone().isoformat()
     assert data["modified_at"] == payment.modified_at.astimezone().isoformat()
 
@@ -41,6 +44,7 @@ def test_positive_serialization_one_obj(payment):
     [
         "value",
         "loan",
+        "payment_date",
     ],
 )
 def test_negative_missing_fields(field, create_payment_payload):
@@ -79,12 +83,18 @@ def test_negative_missing_fields(field, create_payment_payload):
             "10ad5e50-0068-4898-a84e-2b0ffb3333ae",
             'Pk inválido "10ad5e50-0068-4898-a84e-2b0ffb3333ae" - objeto não existe.',
         ),
+        (
+            "payment_date",
+            "not_a_valid_date",
+            "Formato inválido para data. Use um dos formatos a seguir: YYYY-MM-DD.",
+        ),
     ],
     ids=[
         "value_lt_zero",
         "value_NaN",
         "loan_invalid_id",
         "loan_id_not_exists",
+        "payment_date_not_a_valid_date",
     ],
 )
 def test_negative_validation_errors(field, value, error, create_payment_payload, user_with_token):
@@ -129,6 +139,7 @@ def test_negative_create_payment_cannot_exceed_the_total_debt(loan_with_payments
     data = {
         "value": loan_with_payments.amount_due + Decimal("10.00"),
         "loan": str(loan_with_payments.uuid),
+        "payment_date": fake.date(),
     }
 
     serializer = PaymentSerializer(data=data, context={"request": request})

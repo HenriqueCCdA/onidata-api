@@ -33,6 +33,7 @@ class LoanSerializer(serializers.ModelSerializer):
             "register_ip",
             "payments",
             "bank",
+            "request_date",
             "created_at",
             "modified_at",
         )
@@ -80,6 +81,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             "uuid",
             "value",
             "loan",
+            "payment_date",
             "created_at",
             "modified_at",
         )

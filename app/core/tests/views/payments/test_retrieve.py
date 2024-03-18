@@ -21,6 +21,7 @@ def test_positive(client_api_auth, payment):
     assert body["uuid"] == str(payment.uuid)
     assert body["value"] == str(payment.value)
     assert body["loan"] == str(payment.loan.uuid)
+    assert body["payment_date"] == payment.payment_date.isoformat()
     assert body["created_at"] == payment.created_at.astimezone().isoformat()
     assert body["modified_at"] == payment.modified_at.astimezone().isoformat()
 
