@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import pytest
 from django.test import RequestFactory
 
@@ -115,3 +117,22 @@ def test_positive_create(create_payment_payload, user_with_token):
     serializer.save()
 
     assert Payment.objects.exists()
+
+
+@pytest.mark.integration()
+def test_negative_create_payment_cannot_exceed_the_total_debt(loan_with_payments):
+
+    request = RequestFactory().request()
+
+    request.user = loan_with_payments.user
+
+    data = {
+        "value": loan_with_payments.amount_due + Decimal("10.00"),
+        "loan": str(loan_with_payments.uuid),
+    }
+
+    serializer = PaymentSerializer(data=data, context={"request": request})
+
+    assert not serializer.is_valid()
+
+    assert serializer.errors == {"value": ['O pagamento "12510.00" é maior que divida "12500.00" atual.']}

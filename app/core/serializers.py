@@ -112,6 +112,13 @@ class PaymentSerializer(serializers.ModelSerializer):
                 code="does_not_exist",
             ) from e
 
+        payment = attrs["value"]
+        if loan.amount_due < payment:
+            raise ValidationError(
+                {"value": f'O pagamento "{payment}" é maior que divida "{loan.amount_due}" atual.'},
+                code="invalid_payment",
+            )
+
         attrs["loan"] = loan
 
         return attrs
