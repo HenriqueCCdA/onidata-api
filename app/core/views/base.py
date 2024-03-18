@@ -11,3 +11,16 @@ from app.core.services import extract_client_id
 def get_client_ip(request):
     """Retorna o IP do client"""
     return Response({"client_ip": extract_client_id(request.META)})
+
+
+@extend_schema(tags=["root"])
+@api_view(["GET"])
+@permission_classes([])
+def root(request):
+    """Pagina root"""
+    return Response(
+        {
+            "api": "anidata-api",
+            "doc_ref": "/docs/",
+        }
+    )

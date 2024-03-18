@@ -4,6 +4,7 @@ from . import views
 
 app_name = "core"
 urlpatterns = [
+    path("", views.root, name="root"),
     path("get_client_ip/", views.get_client_ip, name="get-client-ip"),
     #
     path("loans/", views.loan_lc, name="loans-list-create"),
