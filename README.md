@@ -2,8 +2,8 @@
 
 ![](https://img.shields.io/github/last-commit/HenriqueCCdA/onidata-api?style=plasti&ccolor=blue)
 ![](https://img.shields.io/badge/Autor-Henrique%20C%20C%20de%20Andrade-blue)
-[![codecov](https://codecov.io/gh/HenriqueCCdA/onidata-api/graph/badge.svg?token=CTQLPZVORM)](https://codecov.io/gh/HenriqueCCdA/onidata-api)
-[![Backend](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml/badge.svg)](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml)
+[![Codecov](https://codecov.io/gh/HenriqueCCdA/onidata-api/graph/badge.svg?token=CTQLPZVORM)](https://codecov.io/gh/HenriqueCCdA/onidata-api)
+[![CI](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml/badge.svg)](https://github.com/HenriqueCCdA/onidata-api/actions/workflows/CI.yml)
 
 API de controle de emprestrimo criada utilizando DRF. As libs utilizadas:
 

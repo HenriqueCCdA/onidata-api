@@ -98,6 +98,7 @@ def test_negative_missing_fields(field, create_payment_payload):
     ],
 )
 def test_negative_validation_errors(field, value, error, create_payment_payload, user_with_token):
+
     data = create_payment_payload.copy()
 
     request = RequestFactory().request()
@@ -111,6 +112,21 @@ def test_negative_validation_errors(field, value, error, create_payment_payload,
     assert not serializer.is_valid()
 
     assert serializer.errors[field] == [error]
+
+
+@pytest.mark.integration()
+def test_negative_payment_cannot_be_made_before_the_loan_request(payment_in_the_past, user_with_token):
+
+    request = RequestFactory().request()
+    request.user = user_with_token
+
+    serializer = PaymentSerializer(data=payment_in_the_past, context={"request": request})
+
+    assert not serializer.is_valid()
+
+    expected_msg = 'O data do pagamento "2024-01-01" é antes da data de requisição "2024-01-02" do emprestimo.'
+
+    assert serializer.errors["payment_date"] == [expected_msg]
 
 
 @pytest.mark.integration()

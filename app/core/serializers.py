@@ -114,6 +114,8 @@ class PaymentSerializer(serializers.ModelSerializer):
                 code="does_not_exist",
             ) from e
 
+        attrs["loan"] = loan
+
         payment = attrs["value"]
         if loan.amount_due < payment:
             raise ValidationError(
@@ -121,6 +123,12 @@ class PaymentSerializer(serializers.ModelSerializer):
                 code="invalid_payment",
             )
 
-        attrs["loan"] = loan
+        payment_date = attrs["payment_date"]
+        if loan.request_date > payment_date:
+            msg = (
+                f'O data do pagamento "{payment_date}" é antes da data de requisição "{loan.request_date}"'
+                " do emprestimo."
+            )
+            raise ValidationError({"payment_date": msg}, code="invalid_payment")
 
         return attrs
