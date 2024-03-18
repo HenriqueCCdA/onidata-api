@@ -158,3 +158,16 @@ SHELL_PLUS_IMPORTS = [
 
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+SENTRY_DNS = config("SENTRY_DNS", default=False)
+
+if SENTRY_DNS:
+
+    import sentry_sdk
+
+    sentry_sdk.init(
+        dsn=SENTRY_DNS,
+        enable_tracing=True,
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+    )
