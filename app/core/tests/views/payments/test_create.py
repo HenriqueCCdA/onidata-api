@@ -1,10 +1,10 @@
+from datetime import timedelta
 from decimal import Decimal
 
 import pytest
 from django.shortcuts import resolve_url
 from rest_framework import status
 
-from app.conftest import fake
 from app.core.models import Payment
 
 URL = resolve_url("core:payments-list-create")
@@ -35,7 +35,7 @@ def test_negative_payment_cannot_exceed_the_total_debt(client_api_auth, loan_wit
     data = {
         "value": loan_with_payments.amount_due + Decimal("0.01"),
         "loan": str(loan_with_payments.uuid),
-        "payment_date": fake.date(),
+        "payment_date": loan_with_payments.request_date + timedelta(days=60),
     }
 
     response = client_api_auth.post(URL, data=data, format="json")
@@ -45,6 +45,19 @@ def test_negative_payment_cannot_exceed_the_total_debt(client_api_auth, loan_wit
     body = response.json()
 
     assert body["value"] == ['O pagamento "12500.01" é maior que divida "12500.00" atual.']
+
+
+@pytest.mark.integration()
+def test_negative_payment_cannot_be_made_before_the_loan_request(client_api_auth, payment_in_the_past):
+
+    response = client_api_auth.post(URL, data=payment_in_the_past, format="json")
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    body = response.json()
+
+    msg = 'O data do pagamento "2024-01-01" é antes da data de requisição "2024-01-02" do emprestimo.'
+    assert body["payment_date"] == [msg]
 
 
 @pytest.mark.integration()
