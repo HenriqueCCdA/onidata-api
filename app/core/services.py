@@ -28,7 +28,7 @@ def extract_client_id(meta: dict) -> str:
     return ip
 
 
-# TODO: O código esta com problema de perda precisão verifiacar isso depois
+# TODO: O código esta com problema de perda precisão verificar isso depois
 def loan_with_interest(
     principal: Decimal,
     rate: Decimal,

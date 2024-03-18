@@ -65,7 +65,7 @@ class LoanRetrieveView(RetrieveAPIView):
     lookup_url_kwarg = "id"
 
 
-@extend_schema(tags=["Juros, pagementos e valores devidos"])
+@extend_schema(tags=["Juros, pagamentos e valores devidos"])
 class LoanPaymentListView(APIView):
     serializer_class = PaymentSerializer
     permission_classes = (UserOnlyCanAccessOwnPayment, IsAuthenticated)
@@ -73,7 +73,7 @@ class LoanPaymentListView(APIView):
     @extend_schema(summary="Lista de pagamentos do emprestimo")
     def get(self, request, id):
         """Lista de pagamentos de um emprestimo específico.
-        O emprestimo pe definido pelo seu `uuid`.
+        O emprestimo é definido pelo seu `uuid`.
         """
         loan = get_object_or_404(Loan, uuid=id, user=self.request.user)
         payments = loan.payments.all()
@@ -85,7 +85,7 @@ class LoanPaymentListView(APIView):
 class LoanPaymentSumView(APIView):
     serializer_class = PaymentSumSerializer
 
-    @extend_schema(tags=["Juros, pagementos e valores devidos"], summary="Soma os pamentos de um emprestimo")
+    @extend_schema(tags=["Juros, pagamentos e valores devidos"], summary="Soma os pamentos de um emprestimo")
     def get(self, request, id):
         """
         Soma os pagamentos feitos para um emprestimo específico.
@@ -103,7 +103,7 @@ class LoanPaymentSumView(APIView):
 class LoanWithInterestView(APIView):
     serializer_class = DebtLoanSerializer
 
-    @extend_schema(tags=["Juros, pagementos e valores devidos"], summary="Calcula montente fianl e juros")
+    @extend_schema(tags=["Juros, pagamentos e valores devidos"], summary="Calcula montente fianl e juros")
     def get(self, request, id):
         """
         Calcula o montante final e o juros de um emprestimos especifico.
@@ -128,7 +128,7 @@ class LoanWithInterestView(APIView):
 class AmountDueView(APIView):
     serializer_class = AmountDueSerializer
 
-    @extend_schema(tags=["Juros, pagementos e valores devidos"], summary="Valor devido")
+    @extend_schema(tags=["Juros, pagamentos e valores devidos"], summary="Valor devido")
     def get(self, request, id):
         """Total do valor devido com os pagamentos já descontados. O emprestimo é definido pelo seu `uuid`.
         O calculo e feito com juros simples.
