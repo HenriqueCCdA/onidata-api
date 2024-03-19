@@ -31,6 +31,12 @@ API de controle de emprestrimo criada utilizando DRF. As libs utilizadas:
 
 Deploy da aplicação no fly.io: ⚠️⚠️⚠️⚠️ [onidata-api.fly.dev](https://onidata-api.fly.dev/) ⚠️⚠️⚠️⚠️
 
+Usuarios dispinveis
+
+1. user1@email.com - 123456!!
+2. user2@email.com - 123456!!
+3. admin@admin.com - admin
+
 Os arquivos `Dockerfile` e `fly.toml`foram são do deploy do `fly.io`.
 
 
